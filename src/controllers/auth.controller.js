@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { jwtsecretkey } = require("../config/config");
 
 const checkLoggedIn = async (req, res) => {
   const token = req.cookies.Authtokenvalexpert;
@@ -7,7 +8,7 @@ const checkLoggedIn = async (req, res) => {
     if (!token) {
       res.json(false);
     } else {
-      jwt.verify(token, "mynameismohammedamrath");
+      jwt.verify(token, jwtsecretkey);
       res.json(true);
     }
   } catch (error) {

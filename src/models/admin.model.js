@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { jwtsecretkey } = require("../config/config");
 
 const adminSchema = mongoose.Schema({
   username: {
@@ -25,7 +26,7 @@ const adminSchema = mongoose.Schema({
 });
 
 adminSchema.methods.generateAuthToken = async function () {
-  const token = jwt.sign({ _id: this._id }, "mynameismohammedamrath", {
+  const token = jwt.sign({ _id: this._id }, jwtsecretkey, {
     expiresIn: "15m",
   });
   this.tokens = this.tokens.concat({ token: token });

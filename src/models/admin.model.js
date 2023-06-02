@@ -2,8 +2,13 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { jwtsecretkey } = require("../config/config");
+const { string } = require("joi");
 
 const adminSchema = mongoose.Schema({
+  companyId: {
+    type: String,
+    required: true,
+  },
   username: {
     type: String,
     required: true,

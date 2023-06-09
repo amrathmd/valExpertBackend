@@ -3,12 +3,14 @@ const bcrypt = require("bcrypt");
 
 const createAdmin = async (body) => {
   const existingUser = await Admin.findOne({ email: body.email });
+
   if (existingUser) {
     return {
       message: "User already exists",
       status: 409,
     };
   } else {
+    body.userType = "valexpertadmin";
     const newAdmin = new Admin(body);
     await newAdmin.save();
     return {
@@ -40,7 +42,10 @@ const checkLogin = async (body) => {
       const token = await result.generateAuthToken();
       return {
         status: 201,
-        message: "login Successful",
+        message: {
+          username: result.username,
+          userType: result.userType,
+        },
         token: token,
       };
     } else {

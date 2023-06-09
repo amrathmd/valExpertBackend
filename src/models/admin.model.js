@@ -21,6 +21,10 @@ const adminSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  userType: {
+    type: String,
+    enum: ["valexpertadmin", "admin", "user"],
+  },
   tokens: [
     {
       token: {

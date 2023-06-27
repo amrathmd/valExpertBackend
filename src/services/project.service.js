@@ -1,25 +1,23 @@
 const Project = require("../models/project.model");
 
 const createProject = async(projectBody) => {
-    const { name, department, category, description, implementationDate } = projectBody;
+    const { project } = projectBody;
+    console.log("Came");
 
     // Creating a new project instance
-    const project = new Project.create({
-        name,
-        department,
-        category,
-        description,
-        implementationDate,
-    });
-    if (!project) {
+    const projectStatus = await Project.create(project);
+    if (!projectStatus) {
+        console.log("status");
         throw new Error('error something went wrong ');
     }
-    return {
-        status: true,
-        code: 201,
-        message: "succes",
-        info: project
-    }
+    console.log("p", projectStatus);
+    return projectStatus;
+}
+const getProjects = async() => {
+    const projects = await Project.find().sort({
+        'createdAt': -1
+    });
+    return projects;
 }
 
-module.export = { createProject }
+module.exports = { createProject, getProjects }

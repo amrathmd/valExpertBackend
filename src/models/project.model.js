@@ -22,6 +22,8 @@ const projectSchema = new Schema({
         type: Date,
         required: true,
     },
+}, {
+    timestamps: true,
 });
 
 const Project = mongoose.model('Project', projectSchema);

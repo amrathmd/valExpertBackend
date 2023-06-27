@@ -3,8 +3,13 @@ const catchAsync = require('../utils/catchAsync');
 
 // Creating  a new project
 const createProject = catchAsync(async(req, res) => {
-    const { status, code, message, info } = await projectService.createProject(req.body);
-    res.status(code).json(message, info);
+    const status = await projectService.createProject(req.body);
+    res.json(status);
 });
+const getProjects = catchAsync(async(req, res) => {
+    const allProjects = await projectService.getProjects();
+    res.json(allProjects);
 
-module.exports = { createProject }
+})
+
+module.exports = { createProject, getProjects }

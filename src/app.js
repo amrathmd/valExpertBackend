@@ -42,7 +42,7 @@ app.use(compression());
 app.use(
   cors({
     credentials: true,
-    origin: ["*"],
+    origin: ["http://localhost:8080"],
   })
 );
 app.options("*", cors());

@@ -10,7 +10,7 @@ const createAdmin = async (body) => {
       status: 409,
     };
   } else {
-    body.userType = "valexpertadmin";
+    body.userType = "admin";
     const newAdmin = new Admin(body);
     await newAdmin.save();
     return {

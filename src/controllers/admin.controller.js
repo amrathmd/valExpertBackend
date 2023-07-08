@@ -2,22 +2,24 @@ const adminServices = require("../services/admin.service");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
-const createAdmin = async(req, res) => {
-    const encrptPassword = await bcrypt.hash(req.body.password, saltRounds);
-    const adminBody = {
-        companyId: req.body.companyId,
-        username: req.body.username,
-        password: encrptPassword,
-        email: req.body.email,
-    };
-    try {
-        const result = await adminServices.createAdmin(adminBody);
 
-        res.status(result.status).send(result.message);
-    } catch (err) {
-        console.log(err);
-        res.status(500).send({ message: "Internal sever error" });
-    }
+const createAdmin = async (req, res) => {
+  const encrptPassword = await bcrypt.hash(req.body.password, saltRounds);
+  const adminBody = {
+    companyId: req.body.companyId,
+    username: req.body.username,
+    password: encrptPassword,
+    email: req.body.email,
+  };
+  try {
+    const result = await adminServices.createAdmin(adminBody);
+    console.log(result);
+    res.status(result.status).send(result.message);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ message: "Internal sever error" });
+  }
+
 };
 const deleteAdmin = async(req, res) => {
     const id = req.params.id;

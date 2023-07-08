@@ -5,6 +5,7 @@ const companyRoute = require("./company.route");
 const config = require("../../config/config");
 const authRoute = require("./auth.route");
 const projectRoute = require('./project.route');
+const testsetsRoute = require("./testsets.route");
 
 const router = express.Router();
 
@@ -28,6 +29,10 @@ const defaultRoutes = [{
         path: "/projects",
         route: projectRoute,
     },
+    {
+        path: "/testsets",
+        route: testsetsRoute,
+    }
 
 ];
 

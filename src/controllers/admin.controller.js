@@ -2,6 +2,7 @@ const adminServices = require("../services/admin.service");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
+
 const createAdmin = async (req, res) => {
   const encrptPassword = await bcrypt.hash(req.body.password, saltRounds);
   const adminBody = {
@@ -18,34 +19,35 @@ const createAdmin = async (req, res) => {
     console.log(err);
     res.status(500).send({ message: "Internal sever error" });
   }
+
 };
-const deleteAdmin = async (req, res) => {
-  const id = req.params.id;
-  try {
-    const result = await adminServices.deleteAdmin(id);
-  } catch (err) {
-    res.status(500).send({ message: "Internal server Error" });
-  }
-};
-const loginAdmin = async (req, res) => {
-  try {
-    const result = await adminServices.checkLogin(req.body);
-    if (result.status === 201) {
-      res.cookie("Authtokenvalexpert", result.token, {
-        httpOnly: true,
-      });
+const deleteAdmin = async(req, res) => {
+    const id = req.params.id;
+    try {
+        const result = await adminServices.deleteAdmin(id);
+    } catch (err) {
+        res.status(500).send({ message: "Internal server Error" });
     }
-    return res.status(result.status).send(result);
-  } catch (err) {
-    console.log(err);
-    res
-      .status(500)
-      .send({ message: "Some internal server error occured,Try again!" });
-  }
+};
+const loginAdmin = async(req, res) => {
+    try {
+        const result = await adminServices.checkLogin(req.body);
+        if (result.status === 201) {
+            res.cookie("Authtokenvalexpert", result.token, {
+                httpOnly: true,
+            });
+        }
+        return res.status(result.status).send(result);
+    } catch (err) {
+        console.log(err);
+        res
+            .status(500)
+            .send({ message: "Some internal server error occured,Try again!" });
+    }
 };
 
 module.exports = {
-  createAdmin,
-  deleteAdmin,
-  loginAdmin,
+    createAdmin,
+    deleteAdmin,
+    loginAdmin,
 };

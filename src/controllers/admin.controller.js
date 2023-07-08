@@ -12,7 +12,7 @@ const createAdmin = async (req, res) => {
   };
   try {
     const result = await adminServices.createAdmin(adminBody);
-
+    console.log(result);
     res.status(result.status).send(result.message);
   } catch (err) {
     console.log(err);

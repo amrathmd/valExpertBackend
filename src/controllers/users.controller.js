@@ -1,6 +1,5 @@
 const { adminusersService } = require('../services');
 const catchAsync = require('../utils/catchAsync');
-const mongoose = require('mongoose');
 
 // Adding a new user
 const addUser = catchAsync(async(req, res) => {
@@ -26,6 +25,7 @@ const getUsers = catchAsync(async(req, res) => {
     const allUsers = await adminusersService.getUsers();
     res.json(allUsers);
 });
+
 module.exports = {
     addUser,
     editUser,

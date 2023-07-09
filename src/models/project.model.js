@@ -22,6 +22,11 @@ const projectSchema = new Schema({
         type: Date,
         required: true,
     },
+    requirementsets : [
+        {
+            type : mongoose.Types.ObjectId()
+        }
+    ]
 }, {
     timestamps: true,
 });

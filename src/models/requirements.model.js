@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const RequirementSetSchema = new mongoose.Schema({
     name : {
       type: String,
-      required: type
+      required: true
     },
     projectId: {
       type: String,
@@ -11,18 +11,20 @@ const RequirementSetSchema = new mongoose.Schema({
     },
     requirements:[
       {
-        type: mongoose.Types.ObjectId()
-      }
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'RequirementModel' 
+      },
     ],
     testSets: [
       {
-        type: mongoose.Types.ObjectId()
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'testsets'
       }
     ]
 });
 const RequirementSchema = new mongoose.Schema({
   requirementSetId: {
-    type: mongoose.Types.ObjectId(),
+    type: mongoose.Schema.Types.ObjectId,
     required: true
   },
   requirementDescription: {
@@ -32,9 +34,8 @@ const RequirementSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  Verification : {
+  verification : {
     enum : ['Testing','Procedure','Testing and Procedure'],
-    required: true
   },
   reference:{
     type: String,
@@ -42,10 +43,10 @@ const RequirementSchema = new mongoose.Schema({
   }
 });
 
-const RequirementSetModel = new mongoose.model('requirementset',RequirementSetSchema);
-const RequirementModel = new mongoose.model('requirements',RequirementSchema);
+const RequirementSet = new mongoose.model('Requirementset',RequirementSetSchema);
+const Requirement = new mongoose.model('Requirement',RequirementSchema);
 
-module.export={
-  RequirementSetModel,
-  RequirementModel
+module.exports={
+RequirementSet,
+  Requirement
 }

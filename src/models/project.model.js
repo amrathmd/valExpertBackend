@@ -24,8 +24,9 @@ const projectSchema = new Schema({
     },
     requirementsets : [
         {
-            type : mongoose.Types.ObjectId()
-        }
+            type : mongoose.Schema.Types.ObjectId,
+            ref: 'RequirementSetModel'
+        },
     ]
 }, {
     timestamps: true,

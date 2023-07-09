@@ -1,13 +1,10 @@
 const express = require('express');
 const { requirementsController } = require('../../controllers');
-const RequirementModel = require("../../models/testsets.model");
+const Requirement = require("../../models/requirements.model");
 const router = express.Router();
 
-
-router
-    .route('/')
+router.route('/')
     .post(requirementsController.createRequirements)
-    .get(requirementsController.getRequirements)
-
+    .get(requirementsController.getRequirements);
 
 module.exports = router;

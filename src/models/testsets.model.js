@@ -2,14 +2,6 @@ const mongoose = require('mongoose');
 
 
 const testSchema = new mongoose.Schema({
-    testsetId: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true
-    },
-    reqsetId: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true
-    },
     testName: {
         type: String,
         required: true

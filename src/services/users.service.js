@@ -5,6 +5,7 @@ const addUser = async(userData) => {
     try {
         const userId = mongoose.Types.ObjectId();
         const user = new adminUsers({...userData, userId });
+        console.log(user);
         const savedUser = await user.save();
         return savedUser;
     } catch (error) {

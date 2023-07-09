@@ -24,12 +24,10 @@ const projectSchema = new Schema({
     },
     requirementsets : [
         {
-            type : mongoose.Types.ObjectId()
-        }
+            type : mongoose.Schema.Types.ObjectId,
+        },
     ]
-}, {
-    timestamps: true,
-});
+    });
 
 const Project = mongoose.model('Project', projectSchema);
 

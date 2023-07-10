@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
     userId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
     name: {
@@ -21,12 +21,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-
 }, {
     timestamps: true,
-
 });
-
 
 const adminUsers = mongoose.model('adminUsers', userSchema);
 

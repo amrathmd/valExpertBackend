@@ -6,6 +6,7 @@ const config = require("../../config/config");
 const authRoute = require("./auth.route");
 const projectRoute = require('./project.route');
 const testsetsRoute = require("./testsets.route");
+const adminusersRoute=require("./users.route")
 
 const router = express.Router();
 
@@ -32,8 +33,11 @@ const defaultRoutes = [{
     {
         path: "/testsets",
         route: testsetsRoute,
+    },
+    {
+        path: "/adminusers",
+        route: adminusersRoute,
     }
-
 ];
 
 defaultRoutes.forEach((route) => {

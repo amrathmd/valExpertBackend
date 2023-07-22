@@ -42,7 +42,7 @@ app.use(compression());
 app.use(
   cors({
     credentials: true,
-    origin: ["http://localhost:8080"],
+    origin: ["http://localhost:8080","https://valexpert.netlify.app/"],
   })
 );
 app.options("*", cors());

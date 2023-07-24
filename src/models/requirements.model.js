@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const requirementSchema = new mongoose.Schema({
     requirementSetId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
+        ref: 'RequirementSet',
         required: true,
     },
     requirementDescription: {
@@ -22,7 +24,7 @@ const requirementSchema = new mongoose.Schema({
         required: true,
     },
 }, {
-    timestamps: true,
+    timestamps: true
 });
 
 const Requirement = mongoose.model('Requirement', requirementSchema);

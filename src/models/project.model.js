@@ -2,19 +2,6 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const requirementSetSchema = new Schema({
-    name: {
-        type: String,
-        required: true,
-    },
-    requirements: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Requirement',
-    }],
-}, {
-    timestamps: true,
-});
-
 const projectSchema = new Schema({
     name: {
         type: String,
@@ -36,15 +23,16 @@ const projectSchema = new Schema({
         type: Date,
         required: true,
     },
-    requirementSets: [{
+    requirementsets: [{
         type: Schema.Types.ObjectId,
-        ref: 'RequirementSet',
+        ref: "RequirementSet",
+        required: true,
     }],
 }, {
-    timestamps: true,
+    timestamps: true
 });
 
-const RequirementSet = mongoose.model('RequirementSet', requirementSetSchema);
+
 const Project = mongoose.model('Project', projectSchema);
 
-module.exports = { RequirementSet, Project };
+module.exports = Project;

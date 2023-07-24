@@ -1,22 +1,35 @@
 const mongoose = require('mongoose');
 const Requirement = require('../models/requirements.model');
+const RequirementSet = require('../models/requirementSet.model');
+const { v4: uuidv4 } = require('uuid');
 
 
 const createRequirements = async(requirementBody) => {
     try {
-        const requirementsetId = mongoose.Types.ObjectId();
-        const requirement = new Requirement({...requirementBody, requirementsetId });
+        const { requirementSetId, ...rest } = requirementBody;
+
+        const requirementSet = await RequirementSet.findOne({ _id: requirementSetId });
+
+        if (!requirementSet) {
+            throw new Error('RequirementSet not found');
+        }
+
+        const requirement = new Requirement({
+            requirementSetId: requirementSet._id,
+            ...rest,
+        });
+
         const savedRequirement = await requirement.save();
+
+        requirementSet.requirements.push(savedRequirement._id);
+        await requirementSet.save();
+
         return savedRequirement;
-
-
     } catch (error) {
         console.log(error);
         throw new Error('Error saving requirement');
     }
 };
-
-
 
 
 const getRequirements = async() => {
@@ -27,5 +40,59 @@ const getRequirements = async() => {
         throw new Error('Error retrieving requirements');
     }
 };
+const getRequirementById = async(requirementId) => {
+    try {
+        const requirement = await Requirement.findById(requirementId);
+        if (!requirement) {
+            throw new Error('Error: Requirement not found');
+        }
+        return requirement;
+    } catch (error) {
+        console.error('Error retrieving requirement:', error);
+        throw new Error('Error retrieving requirement');
+    }
+};
+const updateRequirement = async(requirementId, updateData) => {
+    try {
+        const requirement = await Requirement.findByIdAndUpdate(
+            requirementId,
+            updateData, { new: true }
+        );
 
-module.exports = { createRequirements, getRequirements };
+        if (!requirement) {
+            throw new Error('Error: Requirement not found');
+        }
+
+        return requirement;
+    } catch (error) {
+        console.error('Error updating requirement:', error);
+        throw new Error('Error updating requirement');
+    }
+};
+const deleteRequirement = async(requirementId) => {
+    const requirement = await Requirement.findById(requirementId);
+    if (!requirement) {
+        throw new Error('Error: Requirement not found');
+    }
+
+    const requirementSet = await RequirementSet.findById(requirement.requirementSetId);
+    if (!requirementSet) {
+        throw new Error('Error: RequirementSet not found');
+    }
+
+    // Remove the requirement from the requirements array in the requirementSet model
+    requirementSet.requirements.pull(requirementId);
+    await requirementSet.save();
+
+    // Now delete the requirement itself
+    const deletedRequirement = await Requirement.findByIdAndDelete(requirementId);
+    return deletedRequirement;
+};
+module.exports = {
+    createRequirements,
+    getRequirements,
+    getRequirementById,
+    updateRequirement,
+    deleteRequirement,
+    Requirement
+};

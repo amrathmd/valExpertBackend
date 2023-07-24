@@ -37,4 +37,4 @@ const getUsers = async() => {
     return getusers;
 }
 
-module.exports = { addUser, editUser, deleteUser };
+module.exports = { addUser, editUser, deleteUser, getUsers };

@@ -12,4 +12,15 @@ const getTestsets = catchAsync(async(req, res) => {
     res.json(allTestsets);
 });
 
-module.exports = { createTestsets, getTestsets };
+const getTestsetById = catchAsync(async(req, res) => {
+    const { id } = req.params;
+    const testset = await testsetsService.getTestsetById(id);
+    res.json(testset);
+});
+const deleteTestset = catchAsync(async(req, res) => {
+    const { id } = req.params;
+    const deletedTestset = await testsetsService.deleteTestset(id);
+    res.json(deletedTestset);
+});
+
+module.exports = { createTestsets, getTestsets, getTestsetById, deleteTestset };

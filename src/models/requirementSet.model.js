@@ -10,6 +10,12 @@ const requirementSetSchema = new Schema({
         ref: 'Project',
         required: true,
     },
+    testsetId:{
+            type:Schema.Types.ObjectId,
+            ref:'Test',
+
+    }
+    ,
     requirements: [{
         type: Schema.Types.ObjectId,
         ref: "Requirement",

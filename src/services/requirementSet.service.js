@@ -2,6 +2,7 @@ const { Schema } = require('mongoose');
 const RequirementSet = require("../models/requirementSet.model");
 const Project = require("../models/project.model");
 const Requirement = require("../models/requirements.model");
+const Test = require("../models/testsets.model")
 const { v4: uuidv4 } = require('uuid');
 const { mongoose } = require('../config/config');
 
@@ -54,6 +55,7 @@ const deleteRequirementSet = async(requirementSetId) => {
         throw new Error("Error: RequirementSet not found");
     }
 
+    await Test.deleteOne({requirementSetId});
     await Requirement.deleteMany({ requirementSetId });
     await Project.updateOne({ _id: requirementSet.projectId }, { $pull: { requirementsets: requirementSetId } });
 

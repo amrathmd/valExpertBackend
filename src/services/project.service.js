@@ -1,6 +1,7 @@
 const Project = require("../models/project.model");
 const RequirementSet = require("../models/requirementSet.model");
 const Requirement = require("../models/requirements.model");
+const Test = require("../models/testsets.model");
 
 const createProject = async(projectBody) => {
     const projectStatus = new Project({
@@ -34,7 +35,11 @@ const deleteProject = async(projectId) => {
     }
 
     await Requirement.deleteMany({ requirementSetId: { $in: project.requirementsets } });
+    
+  
+  await Test.deleteMany({ _id: { $in: project.requirementsets.map(rs => rs.testsetId) } });
     await RequirementSet.deleteMany({ _id: { $in: project.requirementsets } });
+    
 
     const deletedProject = await Project.findByIdAndDelete(projectId);
     return deletedProject;

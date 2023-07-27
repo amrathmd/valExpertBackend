@@ -80,7 +80,7 @@ const deleteRequirement = async(requirementId) => {
         throw new Error('Error: RequirementSet not found');
     }
 
-    // Remove the requirement from the requirements array in the requirementSet model
+    
     requirementSet.requirements.pull(requirementId);
     await requirementSet.save();
 

@@ -1,20 +1,22 @@
 const adminUsers = require('../models/users.model');
+const mongoose = require('mongoose');
 
 const addUser = async(userData) => {
     try {
-        const user = new adminUsers(userData);
+        const userId = mongoose.Types.ObjectId();
+        const user = new adminUsers({...userData, userId });
+        console.log(user);
         const savedUser = await user.save();
         return savedUser;
     } catch (error) {
+        console.log(error);
         throw new Error('Error saving user');
     }
 };
 
 const editUser = async(userId, updatedUserData) => {
     try {
-        const updatedUser = await adminUsers.updateOne({ userId }, {
-            $set: { updatedUserData },
-        });
+        const updatedUser = await adminUsers.updateOne({ userId }, updatedUserData);
         return updatedUser;
     } catch (error) {
         throw new Error('Error updating user');
@@ -31,10 +33,14 @@ const deleteUser = async(userId) => {
 };
 
 const getUsers = async() => {
-    const getusers = await adminUsers.find().sort({
-        'createdAt': -1
-    });
-    return getusers;
-}
+    try {
+        const allUsers = await adminUsers.find().sort({
+            'createdAt': -1
+        });
+        return allUsers;
+    } catch (error) {
+        throw new Error('Error retrieving users');
+    }
+};
 
 module.exports = { addUser, editUser, deleteUser, getUsers };

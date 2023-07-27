@@ -34,12 +34,12 @@ const deleteProject = async(projectId) => {
         throw new Error("Error: Project not found");
     }
 
-    await Requirement.deleteMany({ requirementSetId: { $in: project.requirementsets } });
-    
-  
-  await Test.deleteMany({ _id: { $in: project.requirementsets.map(rs => rs.testsetId) } });
-    await RequirementSet.deleteMany({ _id: { $in: project.requirementsets } });
-    
+    const requirementSetIds = project.requirementsets;
+    const testIds = await RequirementSet.find({ _id: { $in: requirementSetIds } }).distinct('testsetId');
+    await Requirement.deleteMany({ requirementSetId: { $in: requirementSetIds } });
+    await Test.deleteMany({ _id: { $in: testIds } });
+    await RequirementSet.deleteMany({ _id: { $in: requirementSetIds } });
+
 
     const deletedProject = await Project.findByIdAndDelete(projectId);
     return deletedProject;

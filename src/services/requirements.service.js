@@ -40,6 +40,8 @@ const getRequirements = async() => {
         throw new Error('Error retrieving requirements');
     }
 };
+
+
 const getRequirementById = async(requirementId) => {
     try {
         const requirement = await Requirement.findById(requirementId);
@@ -52,6 +54,8 @@ const getRequirementById = async(requirementId) => {
         throw new Error('Error retrieving requirement');
     }
 };
+
+
 const updateRequirement = async(requirementId, updateData) => {
     try {
         const requirement = await Requirement.findByIdAndUpdate(
@@ -69,6 +73,8 @@ const updateRequirement = async(requirementId, updateData) => {
         throw new Error('Error updating requirement');
     }
 };
+
+
 const deleteRequirement = async(requirementId) => {
     const requirement = await Requirement.findById(requirementId);
     if (!requirement) {
@@ -88,11 +94,12 @@ const deleteRequirement = async(requirementId) => {
     const deletedRequirement = await Requirement.findByIdAndDelete(requirementId);
     return deletedRequirement;
 };
+
+
 module.exports = {
     createRequirements,
     getRequirements,
     getRequirementById,
     updateRequirement,
     deleteRequirement,
-    Requirement
 };

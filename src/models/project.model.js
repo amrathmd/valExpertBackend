@@ -28,6 +28,11 @@ const projectSchema = new Schema({
         ref: "RequirementSet",
         required: true,
     }],
+    testsets: [{
+        type: Schema.Types.ObjectId,
+        ref: "Project",
+        required: true,
+    }],
 }, {
     timestamps: true
 });

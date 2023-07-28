@@ -3,9 +3,7 @@ const mongoose = require('mongoose');
 
 const addUser = async(userData) => {
     try {
-        const userId = mongoose.Types.ObjectId();
-        const user = new adminUsers({...userData, userId });
-        console.log(user);
+        const user = new adminUsers({...userData});
         const savedUser = await user.save();
         return savedUser;
     } catch (error) {

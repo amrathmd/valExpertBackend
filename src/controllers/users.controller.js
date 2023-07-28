@@ -3,7 +3,6 @@ const catchAsync = require('../utils/catchAsync');
 
 // Adding a new user
 const addUser = catchAsync(async(req, res) => {
-    console.log("Hello WOrld");
     const newUser = await adminusersService.addUser(req.body);
     res.json(newUser);
 });

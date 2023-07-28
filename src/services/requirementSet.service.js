@@ -3,9 +3,8 @@ const RequirementSet = require("../models/requirementSet.model");
 const Project = require("../models/project.model");
 const Requirement = require("../models/requirements.model");
 const Test = require("../models/testsets.model")
-const { v4: uuidv4 } = require('uuid');
+const Testcase = require("../models/testcases.model");
 const { mongoose } = require('../config/config');
-
 
 
 const createRequirementSet = async(requirementSetBody) => {
@@ -39,6 +38,7 @@ const getRequirementSets = async() => {
     return requirementSets;
 };
 
+
 const getRequirementSetById = async(requirementSetId) => {
     const requirementSet = await RequirementSet.findById(requirementSetId);
     if (!requirementSet) {
@@ -48,17 +48,15 @@ const getRequirementSetById = async(requirementSetId) => {
 };
 
 
-
 const deleteRequirementSet = async(requirementSetId) => {
     const requirementSet = await RequirementSet.findById(requirementSetId);
     if (!requirementSet) {
         throw new Error("Error: RequirementSet not found");
     }
 
-    await Test.deleteOne({requirementSetId});
+    /*await Test.deleteOne({requirementSetId});*/
     await Requirement.deleteMany({ requirementSetId });
     await Project.updateOne({ _id: requirementSet.projectId }, { $pull: { requirementsets: requirementSetId } });
-
     const deletedRequirementSet = await RequirementSet.findByIdAndDelete(requirementSetId);
     return deletedRequirementSet;
 };

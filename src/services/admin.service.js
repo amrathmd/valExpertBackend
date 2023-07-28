@@ -19,7 +19,7 @@ const createAdmin = async (body) => {
     };
   }
 };
-const deleteAdmin = async (id) => {
+const deleteUser = async (id) => {
   const deleteResult = await Admin.deleteOne({ _id: id });
   if (deleteUser) {
     return {
@@ -65,5 +65,5 @@ const checkLogin = async (body) => {
 module.exports = {
   createAdmin,
   checkLogin,
-  deleteAdmin,
+  deleteUser,
 };

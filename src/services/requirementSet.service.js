@@ -54,7 +54,13 @@ const deleteRequirementSet = async(requirementSetId) => {
         throw new Error("Error: RequirementSet not found");
     }
 
-    /*await Test.deleteOne({requirementSetId});*/
+    const testSetId = requirementSet.testsetId;
+    const testset = await Test.findById(testSetId);
+    if (testset) {
+        await Testcase.deleteMany({ testsetId: testSetId });
+        await Project.updateOne({ _id: requirementSet.projectId }, { $pull: { testsets: testSetId } });
+        await Test.findByIdAndDelete(testSetId);
+    }
     await Requirement.deleteMany({ requirementSetId });
     await Project.updateOne({ _id: requirementSet.projectId }, { $pull: { requirementsets: requirementSetId } });
     const deletedRequirementSet = await RequirementSet.findByIdAndDelete(requirementSetId);

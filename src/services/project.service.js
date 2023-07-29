@@ -39,11 +39,10 @@ const deleteProject = async(projectId) => {
     }
     const requirementSetIds = project.requirementsets;
     const testsetIds = project.testsets;
-    //const testIds = await RequirementSet.find({ _id: { $in: requirementSetIds } }).distinct('testsetId');
-    await Testcase.deleteMany({testsetId: {$in: testsetIds}});
-    await Test.deleteMany({_id: { $in: testsetIds}});      
+    await Testcase.deleteMany({ testsetId: { $in: testsetIds } });
+    await Test.deleteMany({ _id: { $in: testsetIds } });
     await Requirement.deleteMany({ requirementSetId: { $in: requirementSetIds } });
-    await Test.deleteMany({ _id: { $in: testIds } });
+    await Test.deleteMany({ _id: { $in: testsetIds } });
     await RequirementSet.deleteMany({ _id: { $in: requirementSetIds } });
     const deletedProject = await Project.findByIdAndDelete(projectId);
     return deletedProject;

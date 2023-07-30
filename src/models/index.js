@@ -4,6 +4,7 @@ module.exports.Company = require("./company.model");
 module.exports.Project = require("./project.model");
 module.exports.Test = require("./testsets.model");
 module.exports.Testcase = require("./testcases.model");
+module.exports.Teststep = require("./teststeps.model");
 module.exports.Requirement = require("./requirements.model");
 module.exports.RequirementSet = require("./requirementSet.model");
 module.exports.adminUsers=require("./users.model");

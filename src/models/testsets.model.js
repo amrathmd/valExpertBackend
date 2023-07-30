@@ -14,23 +14,23 @@ const testSchema = new mongoose.Schema({
     },
     testName: {
         type: String,
-        required: true
+        required: true,
     },
     requirementSetName: {
         type: String,
-        required: true
+        required: true,
     },
     description: {
         type: String,
-        required: true
+        required: true,
     },
     category: {
         type: String,
-        required: true
+        required: true,
     },
     status: {
         type: String,
-        required: true
+        required: true,
     },
     testcases: [{
         type: Schema.Types.ObjectId,

@@ -17,7 +17,7 @@ const testcaseSchema = new mongoose.Schema({
     },
     acceptanceCriteria: {
         type: String,
-        required: true
+        required: true,
     },
     prerequesites: {
         type: String,

@@ -5,7 +5,9 @@ const Test = require('../models/testsets.model');
 
 const createTestcases = async(testcaseBody) => {
     try {
-        const { testsetId, ...test } = testcaseBody;
+        console.log(testcaseBody);
+        const { testsetId, ...test } = testcaseBody.testCase;
+
         const testset = await Test.findOne({ _id: testsetId });
         if (!testset) {
             throw new Error('Testset not found');
@@ -14,13 +16,15 @@ const createTestcases = async(testcaseBody) => {
             testsetId: testset._id,
             ...test,
         });
+        console.log(testsetId);
+        console.log(testcase);
         const savedTestcase = await testcase.save();
         testset.testcases.push(savedTestcase._id);
         await testset.save();
         return savedTestcase;
     } catch (error) {
         console.log(error);
-        throw new Error('Error saving requirement');
+        throw new Error('Error saving testcase');
     }
 };
 

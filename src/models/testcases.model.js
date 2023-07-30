@@ -25,7 +25,7 @@ const testcaseSchema = new mongoose.Schema({
     },
     result:{
         type: String,
-        enum: ['Pass', 'Fail', 'Not Started', 'In Progress', 'Cancelled'],
+        enum: ['pass', 'fail', 'not started', 'in progress', 'cancelled'],
         required: true,
     },
     author: {

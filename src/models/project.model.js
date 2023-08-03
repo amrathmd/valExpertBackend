@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const projectSchema = new Schema({
-    name: {
+    projectName: {
         type: String,
         required: true,
     },
@@ -15,13 +15,29 @@ const projectSchema = new Schema({
         type: String,
         required: true,
     },
+    country:{
+        type:String,
+        required:true
+    },
     description: {
         type: String,
         required: true,
     },
-    implementationDate: {
-        type: Date,
-        required: true,
+    facility:{
+        type:String,
+        required:true
+    },
+    scope:{
+        type:String,
+        required:true
+    },
+    // estimationDate: {
+    //     type: Date,
+    //     required: true,
+    // },
+    status:{
+        type:String,
+        required:true
     },
     requirementsets: [{
         type: Schema.Types.ObjectId,
@@ -31,6 +47,7 @@ const projectSchema = new Schema({
 }, {
     timestamps: true
 });
+
 
 
 const Project = mongoose.model('Project', projectSchema);

@@ -6,4 +6,4 @@ module.exports.Test = require("./testsets.model");
 module.exports.Testcase = require("./testcases.model");
 module.exports.Requirement = require("./requirements.model");
 module.exports.RequirementSet = require("./requirementSet.model");
-module.exports.adminUsers=require("./users.model");
+module.exports.adminUser=require("./users.model");

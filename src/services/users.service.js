@@ -1,6 +1,7 @@
-const adminUsers = require('../models/users.model');
-const mongoose = require('mongoose');
+const adminUser = require('../models/users.model');
+const bcrypt = require('bcryptjs');
 
+<<<<<<< HEAD
 const addUser = async(userData) => {
     try {
         const user = new adminUsers({...userData});
@@ -9,36 +10,92 @@ const addUser = async(userData) => {
     } catch (error) {
         console.log(error);
         throw new Error('Error saving user');
+=======
+const createAdminUser = async (userData) => {
+  try {
+    const { email } = userData;
+    const isEmailTaken = await adminUser.isEmailTaken(email);
+    if (isEmailTaken) {
+      throw { statusCode: 400, message: 'Email is already taken.' };
+>>>>>>> 85b7dd3334220ffcf5e7060c697e480d92c3dbb3
     }
+
+    const newUser = new adminUser(userData);
+    newUser.password = await bcrypt.hash(newUser.password, 10);
+    await newUser.save();
+    return newUser;
+  } catch (error) {
+    throw { statusCode: 500, message: 'Error creating user.' };
+  }
 };
 
-const editUser = async(userId, updatedUserData) => {
-    try {
-        const updatedUser = await adminUsers.updateOne({ userId }, updatedUserData);
-        return updatedUser;
-    } catch (error) {
-        throw new Error('Error updating user');
-    }
+const getAdminUsers = async () => {
+  try {
+    const allUsers = await adminUser.find();
+    return allUsers;
+  } catch (error) {
+    throw { statusCode: 500, message: 'Error fetching users.' };
+  }
 };
 
-const deleteUser = async(userId) => {
-    try {
-        const deletedUser = await adminUsers.deleteOne({ userId });
-        return deletedUser;
-    } catch (error) {
-        throw new Error('Error deleting user');
-    }
+const updateAdminUser = async (userId, updatedData) => {
+  try {
+    const updatedUser = await adminUser.findByIdAndUpdate(userId, updatedData, {
+      new: true,
+      runValidators: true,
+    });
+    return updatedUser;
+  } catch (error) {
+    throw { statusCode: 500, message: 'Error updating user.' };
+  }
 };
 
-const getUsers = async() => {
-    try {
-        const allUsers = await adminUsers.find().sort({
-            'createdAt': -1
-        });
-        return allUsers;
-    } catch (error) {
-        throw new Error('Error retrieving users');
-    }
+const getAdminUserById = async (userId) => {
+  try {
+    const user = await adminUser.findById(userId);
+    return user;
+  } catch (error) {
+    throw { statusCode: 404, message: 'adminUser not found.' };
+  }
 };
 
-module.exports = { addUser, editUser, deleteUser, getUsers };
+const deleteAdminUser = async (userId) => {
+  try {
+    await adminUser.findByIdAndDelete(userId);
+  } catch (error) {
+    throw { statusCode: 500, message: 'Error deleting user.' };
+  }
+};
+
+const updateAdminPassword = async (userId, currentPassword, newPassword) => {
+  try {
+    const user = await adminUser.findById(userId);
+    if (!user) {
+      throw { statusCode: 404, message: 'adminUser not found.' };
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(currentPassword,user.password);
+    if (!isPasswordCorrect) {
+      console.log(isPasswordCorrect)
+      throw { statusCode: 400, message: 'Incorrect current password.' };
+    }
+
+    user.password = await bcrypt.hash(newPassword, 8);
+    await user.save();
+  } catch (error) {
+    if (error.statusCode) {
+      throw error;
+    } else {
+      throw { statusCode: 500, message: 'Error updating password.' };
+    }
+  }
+};
+
+module.exports = {
+  createAdminUser,
+  getAdminUsers,
+  getAdminUserById,
+  updateAdminUser,
+  deleteAdminUser,
+  updateAdminPassword,
+};

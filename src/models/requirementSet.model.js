@@ -19,7 +19,7 @@ const requirementSetSchema = new Schema({
     requirements: [{
         type: Schema.Types.ObjectId,
         ref: "Requirement",
-        required: true,
+        
     }],
 }, { timestamps: true });
 

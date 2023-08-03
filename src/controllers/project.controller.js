@@ -11,5 +11,15 @@ const getProjects = catchAsync(async(req, res) => {
     res.json(allProjects);
 
 })
+const getProjectById = catchAsync(async(req, res) => {
+    const projectId = req.params.id;
+    const project = await projectService.getProjectById(projectId);
+    res.json(project);
+});
 
-module.exports = { createProject, getProjects }
+const deleteProject = catchAsync(async(req, res) => {
+    const projectId = req.params.id;
+    await projectService.deleteProject(projectId);
+    res.json({ message: 'Project deleted successfully' });
+});
+module.exports = { createProject, getProjects, getProjectById, deleteProject }

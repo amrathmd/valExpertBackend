@@ -7,6 +7,9 @@ router
     .post(projectController.createProject)
     .get(projectController.getProjects);
 
-
+router
+    .route('/:id')
+    .get(projectController.getProjectById)
+    .delete(projectController.deleteProject);
 
 module.exports = router;

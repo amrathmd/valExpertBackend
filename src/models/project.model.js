@@ -2,6 +2,7 @@ const { string } = require('joi');
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
+
 const projectSchema = new Schema({
     projectName: {
         type: String,
@@ -39,12 +40,15 @@ const projectSchema = new Schema({
         type:String,
         required:true
     },
-    requirementsets : [
-        {
-            type : mongoose.Schema.Types.ObjectId,
-        },
-    ]
-    });
+    requirementsets: [{
+        type: Schema.Types.ObjectId,
+        ref: "RequirementSet",
+        required: true,
+    }],
+}, {
+    timestamps: true
+});
+
 
 const Project = mongoose.model('Project', projectSchema);
 

@@ -7,7 +7,9 @@ const router = express.Router();
 router
     .route('/')
     .post(testsetsController.createTestsets)
-    .get(testsetsController.getTestsets)
-
+    .get(testsetsController.getTestsets);
+router.route('/:id')
+    .get(testsetsController.getTestsetById)
+    .delete(testsetsController.deleteTestset);
 
 module.exports = router;

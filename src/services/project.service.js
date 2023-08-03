@@ -1,8 +1,7 @@
 const Project = require("../models/project.model");
 
 const createProject = async(projectBody) => {
-    const { project } = projectBody;
-    console.log("Came");
+    const project  =new Project(projectBody) ;
 
     // Creating a new project instance
     const projectStatus = await Project.create(project);

@@ -6,4 +6,5 @@ module.exports.projectController = require("./project.controller");
 module.exports.requirementSetController = require("./requirementSet.controller");
 module.exports.testsetsController = require("./testsets.controller");
 module.exports.requirementsController = require("./requirements.controller");
+module.exports.testcasesController = require("./testcases.controller");
 module.exports.adminUserController=require("./users.controller");

@@ -4,5 +4,6 @@ module.exports.companyService = require("./company.service");
 module.exports.projectService = require("./project.service");
 module.exports.requirementSetService = require("./requirementSet.service");
 module.exports.testsetsService = require("./testsets.service");
+module.exports.testcasesService = require("./testcases.service");
 module.exports.adminusersService=require("./users.service");
 module.exports.requirementsService = require("./requirements.service");

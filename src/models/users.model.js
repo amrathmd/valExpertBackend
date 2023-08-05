@@ -26,6 +26,18 @@ const adminUsersSchema = new mongoose.Schema(
         message: "Invalid email address",
       },
     },
+    mobile: {
+      type: String,
+      required: true,
+      unique: true,
+      validate: { 
+        validator: function (value)
+        {
+          return /^[0-9]{10}$/.test(value); 
+        },
+        message: "Invalid mobile number",
+      }
+    },
     status: {
       type: String,
       required: true,

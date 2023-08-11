@@ -8,7 +8,6 @@ const createAdminUser = async (userData) => {
     if (isEmailTaken) {
       throw { statusCode: 400, message: "Email is already taken." };
     }
-
     const newUser = new adminUser(userData);
     newUser.password = await bcrypt.hash(newUser.password, 10);
     await newUser.save();

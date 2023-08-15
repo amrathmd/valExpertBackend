@@ -31,7 +31,12 @@ const testcaseSchema = new mongoose.Schema({
     author: {
         type: String,
         required: true,
-    }
+    },
+    teststeps: [{
+        type: Schema.Types.ObjectId,
+        ref: "Testcase",
+        required: true,
+    }],
 }, {
     timestamps: true
 });

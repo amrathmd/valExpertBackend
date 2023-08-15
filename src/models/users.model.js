@@ -30,13 +30,6 @@ const adminUsersSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      validate: { 
-        validator: function (value)
-        {
-          return /^[0-9]{10}$/.test(value); 
-        },
-        message: "Invalid mobile number",
-      }
     },
     status: {
       type: String,
@@ -62,9 +55,8 @@ const adminUsersSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
       trim: true,
-      minlength: 8,
+      minlength: 6,
       private: true,
     },
   },

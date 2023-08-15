@@ -6,6 +6,38 @@ const Project = require("../models/project.model");
 const catchAsync = require("../utils/catchAsync");
 
 //creating a Testsetfv
+<<<<<<< HEAD
+
+const createTestsets = async (testsetsBody) => {
+    try {
+        const { projectId, requirementSetId, ...rest } = testsetsBody;
+
+        const projectset = await Project.findOne({ _id: projectId });
+        const requirementSet = await RequirementSet.findOne({ _id: requirementSetId });
+
+        if (!requirementSet || !projectset) {
+            throw new Error('RequirementSet or Project not found');
+        }
+
+        const test = new Test({
+            requirementSetId: requirementSet._id,
+            projectId: projectset._id,
+            ...rest,
+        });
+
+        const savedTestset = await test.save();
+
+        requirementSet.testsetId = savedTestset._id;
+        projectset.testsets.push(savedTestset._id);
+
+        await requirementSet.save();
+        await projectset.save();
+
+        return savedTestset;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Error saving testsets');
+=======
 const createTestsets = async (tesetsetsBody) => {
   try {
     console.log("!in create");
@@ -22,6 +54,7 @@ const createTestsets = async (tesetsetsBody) => {
     console.log(requirementSet);
     if (!requirementSet || !projectset) {
       throw new Error("RequirementSet or Project not found");
+>>>>>>> develop
     }
     const test = new Test({
       requirementSetId: requirementSet._id,
@@ -39,6 +72,8 @@ const createTestsets = async (tesetsetsBody) => {
     throw new Error("Error saving testsets");
   }
 };
+
+
 
 //Retrieving all Testsets
 const getTestsets = async () => {

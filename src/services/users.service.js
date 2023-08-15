@@ -1,23 +1,81 @@
 const adminUser = require("../models/users.model");
 const bcrypt = require("bcryptjs");
+const AWS = require("aws-sdk");
+const dotenv = require("dotenv"); 
+
+dotenv.config();
+
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
+});
+
+const ses = new AWS.SES({ apiVersion: "2010-12-01" });
+
+function generateRandomPassword(length) {
+  const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+  let password = "";
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    password += charset[randomIndex];
+  }
+  return password;
+}
+
+async function sendEmailWithPassword(email, password) {
+  const emailParams = {
+    Destination: {
+      ToAddresses: [email],
+    },
+    Message: {
+      Body: {
+        Text: {
+          Data: `Your password is: ${password}\nPlease change it after logging in.`,
+        },
+      },
+      Subject: {
+        Data: "Your Account Information",
+      },
+    },
+    Source: "valexpert.us@gmail.com",
+  };
+
+  await ses.sendEmail(emailParams).promise();
+  try {
+    const result = await ses.sendEmail(emailParams).promise();
+    console.log('Email sent successfully:', result);
+  } catch (error) {
+    console.error('Error sending email:', error);
+    throw error;
+  }
+}
 
 const createAdminUser = async (userData) => {
+  const { email } = userData;
+  const randomPassword = generateRandomPassword(6);
+
   try {
-    const { email } = userData;
+    await sendEmailWithPassword(email, randomPassword);
+
     const isEmailTaken = await adminUser.isEmailTaken(email);
     if (isEmailTaken) {
       throw { statusCode: 400, message: "Email is already taken." };
     }
 
     const newUser = new adminUser(userData);
-    newUser.password = await bcrypt.hash(newUser.password, 10);
+    newUser.password = await bcrypt.hash(randomPassword, 10);
     await newUser.save();
+
     return newUser;
   } catch (error) {
-    //throw { statusCode: 500, message: "Error creating user." };
-    console.log(error);
+    console.error("Error creating user:", error);
+    throw { statusCode: 500, message: "Error creating user." };
   }
 };
+
+
+
 
 const getAdminUsers = async () => {
   try {
@@ -68,13 +126,18 @@ const updateAdminPassword = async (userId, currentPassword, newPassword) => {
       currentPassword,
       user.password
     );
+    console.log("isPasswordCorrect:", isPasswordCorrect);
     if (!isPasswordCorrect) {
-      console.log(isPasswordCorrect);
+      console.log("Incorrect current password.");
       throw { statusCode: 400, message: "Incorrect current password." };
     }
 
+    console.log("Updating password...");
+
     user.password = await bcrypt.hash(newPassword, 8);
     await user.save();
+
+    console.log("Password update successful");
   } catch (error) {
     if (error.statusCode) {
       throw error;

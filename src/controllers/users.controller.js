@@ -2,10 +2,21 @@ const { adminusersService } = require("../services");
 const catchAsync = require("../utils/catchAsync");
 
 
-const createAdminUser = catchAsync(async (req, res) => {
+/*const createAdminUser = catchAsync(async (req, res) => {
   const userData = req.body;
   const newUser = await adminusersService.createAdminUser(userData);
   res.status(201).json({ user: newUser });
+});*/
+
+const createAdminUser = catchAsync(async (req, res) => {
+  const userData = req.body;
+
+  try {
+    const newUser = await adminusersService.createAdminUser(userData);
+    res.status(201).json({ user: newUser });
+  } catch (error) {
+    res.status(500).json({ error: "Error creating user." });
+  }
 });
 
 const getAdminUsers = catchAsync(async (req, res) => {
@@ -47,13 +58,16 @@ const updateAdminPassword = catchAsync(async (req, res) => {
       .json({ error: "Both currentPassword and newPassword are required." });
   }
   try {
+    console.log("Calling adminusersService.updateAdminPassword");
     await adminusersService.updateAdminPassword(
       userId,
       currentPassword,
       newPassword
     );
+    console.log("Password update successful");
     res.status(200).json({ message: "Password updated successfully." });
   } catch (error) {
+    console.error("Error updating password:", error);
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 });

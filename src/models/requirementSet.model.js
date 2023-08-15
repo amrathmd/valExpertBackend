@@ -12,7 +12,6 @@ const requirementSetSchema = new Schema({
     testsetId:{
             type:Schema.Types.ObjectId,
             ref:'Test',
-
     }
     ,
     requirements: [{

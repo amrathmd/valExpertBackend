@@ -5,8 +5,7 @@ const Test = require('../models/testsets.model');
 
 const createTestcases = async(testcaseBody) => {
     try {
-        console.log(testcaseBody);
-        const { testsetId, ...test } = testcaseBody.testCase;
+        const { testsetId, ...test } = testcaseBody;
 
         const testset = await Test.findOne({ _id: testsetId });
         if (!testset) {
@@ -14,10 +13,9 @@ const createTestcases = async(testcaseBody) => {
         }
         const testcase = new Testcase({
             testsetId: testset._id,
+            teststeps: [],
             ...test,
         });
-        console.log(testsetId);
-        console.log(testcase);
         const savedTestcase = await testcase.save();
         testset.testcases.push(savedTestcase._id);
         await testset.save();

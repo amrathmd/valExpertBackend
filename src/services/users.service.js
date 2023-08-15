@@ -14,7 +14,8 @@ const createAdminUser = async (userData) => {
     await newUser.save();
     return newUser;
   } catch (error) {
-    throw { statusCode: 500, message: "Error creating user." };
+    //throw { statusCode: 500, message: "Error creating user." };
+    console.log(error);
   }
 };
 

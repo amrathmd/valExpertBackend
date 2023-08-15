@@ -10,5 +10,7 @@ router.route('/:id')
     .get(testcasesController.getTestcaseById)
     .put(testcasesController.updateTestcase)
     .delete(testcasesController.deleteTestcase);
+router.route('/testset/:id')
+    .get(testcasesController.getTestcasesByTestSetId);
 
 module.exports = router;

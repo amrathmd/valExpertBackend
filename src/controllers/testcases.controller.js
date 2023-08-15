@@ -29,4 +29,10 @@ const deleteTestcase = catchAsync(async(req, res) => {
     res.json(deletedTestcase);
 });
 
-module.exports = { createTestcases, getTestcases, getTestcaseById, updateTestcase, deleteTestcase };
+const getTestcasesByTestSetId=catchAsync(async(req,res)=>{
+    const {id}=req.params;
+    const testCases=await testcasesService.getTestcasesByTestSetId(id);
+    res.json(testCases);
+})
+
+module.exports = { createTestcases, getTestcases, getTestcaseById, updateTestcase, deleteTestcase,getTestcasesByTestSetId };

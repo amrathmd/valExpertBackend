@@ -5,6 +5,7 @@ const Test = require('../models/testsets.model');
 
 const createTestcases = async(testcaseBody) => {
     try {
+        console.log(testcaseBody);
         const { testsetId, ...test } = testcaseBody;
 
         const testset = await Test.findOne({ _id: testsetId });
@@ -83,11 +84,20 @@ const deleteTestcase = async(testcaseId) => {
     return deletedTestcase;
 };
 
+const getTestcasesByTestSetId=async(testsetId)=>{
+        const testCases = await Testcase.find({ testsetId: testsetId });
+        console.log(testCases);
+        return testCases;
+ 
+    
+};
+
 
 module.exports = {
     createTestcases,
     getTestcases,
     getTestcaseById,
     updateTestcase,
-    deleteTestcase
+    deleteTestcase,
+    getTestcasesByTestSetId
 };

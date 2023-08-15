@@ -8,7 +8,6 @@ const requirementSetSchema = new Schema({
     projectId: {
         type: Schema.Types.ObjectId,
         ref: 'Project',
-        required: true,
     },
     testsetId:{
             type:Schema.Types.ObjectId,
@@ -18,7 +17,7 @@ const requirementSetSchema = new Schema({
     requirements: [{
         type: Schema.Types.ObjectId,
         ref: "Requirement",
-        required: true,
+        
     }],
 }, { timestamps: true });
 

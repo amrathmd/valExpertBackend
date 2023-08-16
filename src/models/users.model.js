@@ -57,7 +57,6 @@ const adminUsersSchema = new mongoose.Schema(
       type: String,
       trim: true,
       minlength: 6,
-      private: true,
     },
   },
   {
@@ -83,10 +82,7 @@ adminUsersSchema.statics.isEmailTaken = async function (email, excludeUserId) {
 // Check if password matches the user's password
 adminUsersSchema.methods.isPasswordMatch = async function (password) {
   const user = this;
-  console.log("Stored Password:", user.password);
-  console.log("Provided Password:", password);
   const isMatch = await bcrypt.compare(password, user.password);
-  console.log("Password Match:", isMatch);
   return isMatch;
 };
 

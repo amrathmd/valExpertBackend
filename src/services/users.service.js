@@ -63,10 +63,12 @@ const createAdminUser = async (userData) => {
       throw { statusCode: 400, message: "Email is already taken." };
     }
 
+    const hashPassword = await bcrypt.hash(randomPassword, 8);
+    
     const newUser = new adminUser(userData);
-    newUser.password = await bcrypt.hash(randomPassword, 10);
+    newUser.password=hashPassword;
     await newUser.save();
-
+    console.log("crete hash",newUser.password,randomPassword,newUser);
     return newUser;
   } catch (error) {
     console.error("Error creating user:", error);
@@ -123,10 +125,10 @@ const updateAdminPassword = async (userId, currentPassword, newPassword) => {
     }
 
     const isPasswordCorrect = await bcrypt.compare(
-      currentPassword,
-      user.password
+      user.password,
+      currentPassword
     );
-    console.log("isPasswordCorrect:", isPasswordCorrect);
+    console.log("isPasswordCorrect:", isPasswordCorrect,user.password,currentPassword,await bcrypt.hash(currentPassword, 8));
     if (!isPasswordCorrect) {
       console.log("Incorrect current password.");
       throw { statusCode: 400, message: "Incorrect current password." };
@@ -134,10 +136,10 @@ const updateAdminPassword = async (userId, currentPassword, newPassword) => {
 
     console.log("Updating password...");
 
-    user.password = await bcrypt.hash(newPassword, 8);
-    await user.save();
-
+    const hashedPssword = await bcrypt.hash(newPassword, 8);
+    const updatedUser =  await adminUser.updateOne({_id:userId},{$set:{password:hashedPssword}});
     console.log("Password update successful");
+    return updatedUser;
   } catch (error) {
     if (error.statusCode) {
       throw error;

@@ -11,5 +11,5 @@ router
 router.route('/:id')
     .get(teststepsController.getTeststepById)
     .delete(teststepsController.deleteTeststep);
-
+router.route('/testcases/:id').get(teststepsController.getTestStepsByTestcaseId)
 module.exports = router;

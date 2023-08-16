@@ -1,4 +1,4 @@
-const { teststepsService } = require('../services');
+const { teststepsService, testsetsService } = require('../services');
 const catchAsync = require('../utils/catchAsync');
 const mongoose = require('mongoose');
 
@@ -33,4 +33,10 @@ const deleteTeststep = catchAsync(async(req, res) => {
     res.json(deletedTeststep);
 });
 
-module.exports = { createTeststep, getTeststeps, getTeststepById, deleteTeststep };
+const getTestStepsByTestcaseId=catchAsync(async(req,res)=>{
+    const {id}=req.params;
+    const testSteps=await teststepsService.getTestStepsByTestcaseId(id);
+    res.json(testSteps);
+})
+
+module.exports = { createTeststep, getTeststeps, getTeststepById, deleteTeststep,getTestStepsByTestcaseId };

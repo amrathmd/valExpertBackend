@@ -1,5 +1,6 @@
 const Teststep = require('../models/teststeps.model');
 const Testcase = require('../models/testcases.model');
+const catchAsync = require('../utils/catchAsync');
 
 
 const createTeststep = async (testcaseId, stepNumber, description, expectedResult, requirementIds) => {
@@ -93,7 +94,13 @@ const deleteTeststep = async (id) => {
     throw error;
   }
 };
-module.exports = { createTeststep, getTeststeps, getTeststepById, deleteTeststep};
+
+const getTestStepsByTestcaseId= async(testcaseId)=>{
+  console.log(testcaseId)
+  const testSteps=await Teststep.find({testcaseId:testcaseId})
+  return testSteps;
+}
+module.exports = { createTeststep, getTeststeps, getTeststepById, deleteTeststep,getTestStepsByTestcaseId};
 
 
 

@@ -10,5 +10,8 @@ router.route('/:id')
     .get(requirementsController.getRequirementById)
     .put(requirementsController.updateRequirement)
     .delete(requirementsController.deleteRequirement);
+router.route('/requirementset/:requirementSetId')
+    .get(requirementsController.getRequirementsByRequirementSetId);
+
 
 module.exports = router;

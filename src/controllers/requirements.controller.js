@@ -31,4 +31,11 @@ const deleteRequirement = catchAsync(async(req, res) => {
     res.json(deletedRequirement);
 });
 
-module.exports = { createRequirements, getRequirements, getRequirementById, updateRequirement, deleteRequirement };
+
+const getRequirementsByRequirementSetId = catchAsync(async (req, res) => {
+    const { requirementSetId } = req.params;
+    const requirements = await requirementsService.getRequirementsByRequirementSetId(requirementSetId);
+    res.json(requirements);
+});
+
+module.exports = { createRequirements, getRequirements, getRequirementById, updateRequirement, deleteRequirement , getRequirementsByRequirementSetId};

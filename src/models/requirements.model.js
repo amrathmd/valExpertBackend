@@ -7,10 +7,6 @@ const requirementSchema = new mongoose.Schema({
         ref: 'RequirementSet',
         required: true,
     },
-    requirementName:{
-        type:String,
-        required:true
-    },
     requirementDescription: {
         type: String,
     },

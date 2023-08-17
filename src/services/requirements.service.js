@@ -6,7 +6,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const createRequirements = async(requirementBody) => {
     try {
-
+        console.log("hii i am in requirement@");
         const { requirementSetId, ...rest } = requirementBody;
 
         const requirementSet = await RequirementSet.findOne({ _id: requirementSetId });
@@ -19,7 +19,9 @@ const createRequirements = async(requirementBody) => {
             requirementSetId: requirementSet._id,
             ...rest,
         });
+
         const savedRequirement = await requirement.save();
+
         requirementSet.requirements.push(savedRequirement._id);
         await requirementSet.save();
 
@@ -54,7 +56,19 @@ const getRequirementById = async(requirementId) => {
     }
 };
 
-
+const getRequirementsByRequirementSetId = async (requirementSetId) => {
+    try {
+        const requirements = await Requirement.find({ requirementSetId }); 
+        if (!requirements) {
+            throw new Error('Error: Requirementdetails not found');
+        }
+        console.log(requirements);
+        return requirements;
+    } catch (error) {
+        console.error('Error retrieving requirement details:', error);
+        throw new Error('Error retrieving requirement details');
+    }
+};
 const updateRequirement = async(requirementId, updateData) => {
     try {
         const requirement = await Requirement.findByIdAndUpdate(
@@ -101,4 +115,5 @@ module.exports = {
     getRequirementById,
     updateRequirement,
     deleteRequirement,
+    getRequirementsByRequirementSetId,
 };

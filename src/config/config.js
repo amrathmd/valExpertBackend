@@ -11,7 +11,6 @@ const envVarsSchema = Joi.object()
         PORT: Joi.number().default(3000),
         MONGODB_URL: Joi.string().required().description("Mongo DB url"),
         JWT_SECRET_KEY: Joi.string().required(),
-        SALT_ROUNDS: Joi.number().required()
     })
     .unknown();
 
@@ -35,5 +34,4 @@ module.exports = {
             useUnifiedTopology: true,
         },
     },
-    saltRounds: envVars.SALT_ROUNDS
 };

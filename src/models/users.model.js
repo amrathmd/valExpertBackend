@@ -64,14 +64,7 @@ const adminUsersSchema = new mongoose.Schema(
   }
 );
 
-// Hash the password before saving it to the database
-adminUsersSchema.pre("save", async function (next) {
-  const user = this;
-  if (user.isModified("password")) {
-    user.password = await bcrypt.hash(user.password, 8);
-  }
-  next();
-});
+
 
 // Check if email is taken
 adminUsersSchema.statics.isEmailTaken = async function (email, excludeUserId) {

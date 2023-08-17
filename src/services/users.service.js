@@ -2,6 +2,7 @@ const adminUser = require("../models/users.model");
 const bcrypt = require("bcryptjs");
 const AWS = require("aws-sdk");
 const dotenv = require("dotenv"); 
+const config = require('../config/config')
 
 dotenv.config();
 
@@ -53,22 +54,23 @@ async function sendEmailWithPassword(email, password) {
 
 const createAdminUser = async (userData) => {
   const { email } = userData;
-  const randomPassword = generateRandomPassword(6);
-
   try {
-    await sendEmailWithPassword(email, randomPassword);
-
     const isEmailTaken = await adminUser.isEmailTaken(email);
     if (isEmailTaken) {
       throw { statusCode: 400, message: "Email is already taken." };
     }
-
-    const hashPassword = await bcrypt.hash(randomPassword, 8);
+    const randomPassword = generateRandomPassword(6);
+    await sendEmailWithPassword(email, randomPassword);
+    const hashPassword = await bcrypt.hash(randomPassword, config.saltRounds);
     
-    const newUser = new adminUser(userData);
-    newUser.password=hashPassword;
+    const userData1 = {
+      ...userData,
+      password : hashPassword
+    }
+    const newUser = new adminUser(userData1);
+    
+    
     await newUser.save();
-    console.log("crete hash",newUser.password,randomPassword,newUser);
     return newUser;
   } catch (error) {
     console.error("Error creating user:", error);
@@ -124,21 +126,14 @@ const updateAdminPassword = async (userId, currentPassword, newPassword) => {
       throw { statusCode: 404, message: "adminUser not found." };
     }
 
-    const isPasswordCorrect = await bcrypt.compare(
-      user.password,
-      currentPassword
-    );
-    console.log("isPasswordCorrect:", isPasswordCorrect,user.password,currentPassword,await bcrypt.hash(currentPassword, 8));
+    const isPasswordCorrect = await user.isPasswordMatch(currentPassword);
     if (!isPasswordCorrect) {
-      console.log("Incorrect current password.");
       throw { statusCode: 400, message: "Incorrect current password." };
     }
 
-    console.log("Updating password...");
 
-    const hashedPssword = await bcrypt.hash(newPassword, 8);
+    const hashedPssword = await bcrypt.hash(newPassword, config.saltRounds);
     const updatedUser =  await adminUser.updateOne({_id:userId},{$set:{password:hashedPssword}});
-    console.log("Password update successful");
     return updatedUser;
   } catch (error) {
     if (error.statusCode) {

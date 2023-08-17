@@ -1,13 +1,6 @@
 const { adminusersService } = require("../services");
 const catchAsync = require("../utils/catchAsync");
 
-
-/*const createAdminUser = catchAsync(async (req, res) => {
-  const userData = req.body;
-  const newUser = await adminusersService.createAdminUser(userData);
-  res.status(201).json({ user: newUser });
-});*/
-
 const createAdminUser = catchAsync(async (req, res) => {
   const userData = req.body;
 

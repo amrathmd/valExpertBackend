@@ -2,6 +2,7 @@ const adminUser = require("../models/users.model");
 const bcrypt = require("bcryptjs");
 const AWS = require("aws-sdk");
 const dotenv = require("dotenv"); 
+const config = require('../config/config')
 
 dotenv.config();
 
@@ -53,20 +54,23 @@ async function sendEmailWithPassword(email, password) {
 
 const createAdminUser = async (userData) => {
   const { email } = userData;
-  const randomPassword = generateRandomPassword(6);
-
   try {
-    await sendEmailWithPassword(email, randomPassword);
-
     const isEmailTaken = await adminUser.isEmailTaken(email);
     if (isEmailTaken) {
       throw { statusCode: 400, message: "Email is already taken." };
     }
-
-    const newUser = new adminUser(userData);
-    newUser.password = await bcrypt.hash(randomPassword, 10);
+    const randomPassword = generateRandomPassword(6);
+    await sendEmailWithPassword(email, randomPassword);
+    const hashPassword = await bcrypt.hash(randomPassword, config.saltRounds);
+    
+    const userData1 = {
+      ...userData,
+      password : hashPassword
+    }
+    const newUser = new adminUser(userData1);
+    
+    
     await newUser.save();
-
     return newUser;
   } catch (error) {
     console.error("Error creating user:", error);
@@ -122,22 +126,15 @@ const updateAdminPassword = async (userId, currentPassword, newPassword) => {
       throw { statusCode: 404, message: "adminUser not found." };
     }
 
-    const isPasswordCorrect = await bcrypt.compare(
-      currentPassword,
-      user.password
-    );
-    console.log("isPasswordCorrect:", isPasswordCorrect);
+    const isPasswordCorrect = await user.isPasswordMatch(currentPassword);
     if (!isPasswordCorrect) {
-      console.log("Incorrect current password.");
       throw { statusCode: 400, message: "Incorrect current password." };
     }
 
-    console.log("Updating password...");
 
-    user.password = await bcrypt.hash(newPassword, 8);
-    await user.save();
-
-    console.log("Password update successful");
+    const hashedPssword = await bcrypt.hash(newPassword, config.saltRounds);
+    const updatedUser =  await adminUser.updateOne({_id:userId},{$set:{password:hashedPssword}});
+    return updatedUser;
   } catch (error) {
     if (error.statusCode) {
       throw error;

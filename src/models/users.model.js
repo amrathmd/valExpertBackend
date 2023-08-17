@@ -57,7 +57,6 @@ const adminUsersSchema = new mongoose.Schema(
       type: String,
       trim: true,
       minlength: 6,
-      private: true,
     },
   },
   {
@@ -65,14 +64,7 @@ const adminUsersSchema = new mongoose.Schema(
   }
 );
 
-// Hash the password before saving it to the database
-adminUsersSchema.pre("save", async function (next) {
-  const user = this;
-  if (user.isModified("password")) {
-    user.password = await bcrypt.hash(user.password, 8);
-  }
-  next();
-});
+
 
 // Check if email is taken
 adminUsersSchema.statics.isEmailTaken = async function (email, excludeUserId) {
@@ -83,10 +75,7 @@ adminUsersSchema.statics.isEmailTaken = async function (email, excludeUserId) {
 // Check if password matches the user's password
 adminUsersSchema.methods.isPasswordMatch = async function (password) {
   const user = this;
-  console.log("Stored Password:", user.password);
-  console.log("Provided Password:", password);
   const isMatch = await bcrypt.compare(password, user.password);
-  console.log("Password Match:", isMatch);
   return isMatch;
 };
 

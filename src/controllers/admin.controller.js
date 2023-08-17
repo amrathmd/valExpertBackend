@@ -1,6 +1,6 @@
 const adminServices = require("../services/admin.service");
 const bcrypt = require("bcrypt");
-const saltRounds = 10;
+const config = require('../config/config')
 
 const createAdmin = async (req, res) => {
   const encrptPassword = await bcrypt.hash(req.body.password, saltRounds);

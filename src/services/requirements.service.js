@@ -6,7 +6,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const createRequirements = async(requirementBody) => {
     try {
-        console.log("hii i am in requirement@");
+
         const { requirementSetId, ...rest } = requirementBody;
 
         const requirementSet = await RequirementSet.findOne({ _id: requirementSetId });
@@ -19,9 +19,7 @@ const createRequirements = async(requirementBody) => {
             requirementSetId: requirementSet._id,
             ...rest,
         });
-
         const savedRequirement = await requirement.save();
-
         requirementSet.requirements.push(savedRequirement._id);
         await requirementSet.save();
 

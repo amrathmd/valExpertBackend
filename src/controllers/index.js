@@ -8,4 +8,5 @@ module.exports.testsetsController = require("./testsets.controller");
 module.exports.requirementsController = require("./requirements.controller");
 module.exports.testcasesController = require("./testcases.controller");
 module.exports.teststepsController = require("./teststeps.controller");
-module.exports.adminUserController=require("./users.controller");
+module.exports.adminUserController = require("./users.controller");
+module.exports.confObjectsController = require("./confObjects.controller");

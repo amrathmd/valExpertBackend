@@ -10,7 +10,8 @@ const testcaseRoute = require("./testcases.route");
 const teststepRoute = require("./teststeps.route");
 const requirementsRoute = require("./requirements.route");
 const requirementsetRoute = require("./requirementSet.route");
-const adminusersRoute=require("./users.route")
+const adminusersRoute = require("./users.route");
+const confObjectsRoute = require("./confObjects.route");
 
 const router = express.Router();
 
@@ -57,6 +58,10 @@ const defaultRoutes = [{
     {
         path: "/adminusers",
         route: adminusersRoute,
+    },
+    {
+        path: "/confobjects",
+        route: confObjectsRoute,
     }
 ];
 

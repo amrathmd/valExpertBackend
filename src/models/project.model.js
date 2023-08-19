@@ -68,10 +68,6 @@ const projectSchema = new Schema({
         type: String,
         required: true,
     },
-    createdDate: {
-        type: Date,
-        required: true,
-    },
     requirementsets: [{
         type: Schema.Types.ObjectId,
         ref: "RequirementSet",

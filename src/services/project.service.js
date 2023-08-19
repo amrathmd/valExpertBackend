@@ -5,10 +5,10 @@ const Test = require("../models/testsets.model");
 const Testscript = require("../models/testscripts.model");
 
 const createProject = async(projectBody) => {
-    console.log("hii");
     const projectStatus = new Project({
         requirementsets: [],
         testsets: [],
+        scope:[],
         ...projectBody,
     });
     const createdProject = await projectStatus.save();

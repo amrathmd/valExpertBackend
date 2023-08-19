@@ -16,10 +16,10 @@ const testSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    requirementSetName: {
-        type: String,
-        required: true
-    },
+    // requirementSetName: {
+    //     type: String,
+    //     required: true
+    // },
     description: {
         type: String,
         required: true

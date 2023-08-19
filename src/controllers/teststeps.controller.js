@@ -34,8 +34,8 @@ const deleteTeststep = catchAsync(async(req, res) => {
 });
 
 const getTestStepsByTestcaseId=catchAsync(async(req,res)=>{
-    const {id}=req.params;
-    const testSteps=await teststepsService.getTestStepsByTestcaseId(id);
+    const { id }=req.params;
+    const testSteps=await teststepsService.getTestStepsByTestcaseId( id );
     res.json(testSteps);
 })
 

@@ -12,26 +12,26 @@ const getTestscripts = catchAsync(async(req, res) => {
 });
 
 const getTestscriptById = catchAsync(async(req, res) => {
-    const { testscriptId } = req.params;
-    const testscript = await testscriptsService.getTestscriptById(testscriptId);
+    const { id } = req.params;
+    const testscript = await testscriptsService.getTestscriptById(id);
     res.json(testscript);
 });
 
 const updateTestscript = catchAsync(async(req, res) => {
-    const { testscriptId } = req.params;
-    const updatedTestscript = await testscriptsService.updateTestscript(testscriptId, req.body);
+    const { id } = req.params;
+    const updatedTestscript = await testscriptsService.updateTestscript(id, req.body);
     res.json(updatedTestscript);
 });
 
 const deleteTestscript = catchAsync(async(req, res) => {
-    const { testscriptId } = req.params;
-    const deletedTestscript = await testscriptsService.deleteTestscript(testscriptId);
+    const { id } = req.params;
+    const deletedTestscript = await testscriptsService.deleteTestscript(id);
     res.json(deletedTestscript);
 });
 
 const getTestscriptByTestSetId=catchAsync(async(req,res)=>{
-    const {testscriptId}=req.params;
-    const testscript = await testscriptsService.getTestscriptByTestSetId(testscriptId);
+    const {id}=req.params;
+    const testscript = await testscriptsService.getTestscriptByTestSetId(id);
     res.json(testscript);
 })
 

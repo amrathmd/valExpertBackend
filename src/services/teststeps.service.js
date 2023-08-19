@@ -74,25 +74,27 @@ const getTeststepById = async (id) => {
   }
 };
 
-const deleteTeststep = async (id) => {
+const deleteTeststep = async (teststepId) => {
   try {
-    const teststep = await Teststep.findById(id);
+    const teststep = await Teststep.findById(teststepId);
 
     if (!teststep) {
-      throw new Error('Test step not found.');
+     throw new Error('Test step not found.');
     }
+    
     await Testscript.updateOne(
       { _id: teststep.testscriptId },
       { $pull: { teststeps: teststep._id } }
     );
 
-    const deletedTeststep = await teststep.delete();
+    const deletedTeststep = await teststep.deleteOne();
     return deletedTeststep;
   } catch (error) {
     console.error('Error deleting test step:', error);
     throw error;
   }
 };
+
 
 const getTestStepsByTestcaseId= async(testscriptId)=>{
   console.log(testscriptId)

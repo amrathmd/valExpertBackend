@@ -9,11 +9,18 @@ const requirementSetSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Project',
     },
+    status: {
+        type: String,
+        enum: ['Draft', 'In Review', 'Approved'],
+        required: true,
+    },
     testsetId:{
             type:Schema.Types.ObjectId,
             ref:'Test',
-    }
-    ,
+    },
+    // version: {
+
+    // },
     requirements: [{
         type: Schema.Types.ObjectId,
         ref: "Requirement",

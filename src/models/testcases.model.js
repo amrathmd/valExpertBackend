@@ -34,7 +34,7 @@ const testcaseSchema = new mongoose.Schema({
     },
     teststeps: [{
         type: Schema.Types.ObjectId,
-        ref: "Testcase",
+        ref: "Teststep",
         required: true,
     }],
 }, {

@@ -5,7 +5,6 @@ const Test = require("../models/testsets.model");
 const Testcase = require("../models/testcases.model");
 
 const createProject = async(projectBody) => {
-    console.log("hii");
     const projectStatus = new Project({
         requirementsets: [],
         testsets: [],

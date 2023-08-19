@@ -7,37 +7,70 @@ const projectSchema = new Schema({
         type: String,
         required: true,
     },
-    department: {
+    purpose: {
         type: String,
         required: true,
     },
-    category: {
-        type: String,
-        required: true,
-    },
-    country:{
+    status:{
         type:String,
+        enum: ['Active', 'Inactive'],
         required:true
     },
-    description: {
-        type: String,
-        required: true,
+    activationDate: {
+        type: Date,
+        required: true
+    },
+    inactivationDate: {
+        type: Date,
+        required: true
     },
     facility:{
         type:String,
         required:true
     },
-    scope:{
+    department:{
         type:String,
         required:true
     },
-    // estimationDate: {
-    //     type: Date,
-    //     required: true,
-    // },
-    status:{
+    country:{
         type:String,
         required:true
+    },
+    scope:[{
+        type:String,
+        required:true
+    }],
+    category: {
+        type: String,
+        required: true,
+    },
+    description: {
+        type: String,
+        required: true,
+    },
+    estimationDate: {
+        type: Date,
+        required: true,
+    },
+    applicationName: {
+        type: String,
+    },
+    // applicationVersion: {
+    //     type: Number,
+    // },
+    // changeControlNumber: {
+    //     type: Number,
+    // },
+    // changeControl: {
+
+    // },
+    owner: {
+        type: String,
+        required: true,
+    },
+    createdDate: {
+        type: Date,
+        required: true,
     },
     requirementsets: [{
         type: Schema.Types.ObjectId,
@@ -52,8 +85,6 @@ const projectSchema = new Schema({
 }, {
     timestamps: true
 });
-
-
 
 const Project = mongoose.model('Project', projectSchema);
 

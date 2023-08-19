@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Test = require("../models/testsets.model");
 const RequirementSet = require("../models/requirementSet.model");
-const Testcase = require("../models/testcases.model");
+const Testscript = require("../models/testscripts.model");
 const Project = require("../models/project.model");
 const catchAsync = require("../utils/catchAsync");
 
@@ -21,6 +21,7 @@ const createTestsets = async (testsetsBody) => {
         const test = new Test({
             requirementSetId: requirementSet._id,
             projectId: projectset._id,
+            testscripts: [],
             ...rest,
         });
 
@@ -74,7 +75,7 @@ const deleteTestset = async (testsetId) => {
   if (!requirementSet || !projectset) {
     throw new Error("Error: RequirementSet or Projectset not found");
   }
-  await Testcase.deleteMany({ testsetId });
+  await Testscript.deleteMany({ testsetId });
   requirementSet.testsetId = null;
   await requirementSet.save();
   await Project.updateOne(

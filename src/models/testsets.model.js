@@ -12,7 +12,7 @@ const testSchema = new mongoose.Schema({
         ref: 'RequirementSet',
         required: true,
     },
-    testName: {
+    testSetName: {
         type: String,
         required: true
     },
@@ -26,18 +26,24 @@ const testSchema = new mongoose.Schema({
     },
     category: {
         type: String,
+        enum: ['IQ', 'OQ', 'PQ', 'UAT', 'FAT', 'Integration test', 'Unit tests', 'Smoke test'],
         required: true
     },
     status: {
         type: String,
+        enum: ['Draft', 'In Review', 'Ready for execution','Approved'],
         required: true
     },
-    testcases: [{
+    testscripts: [{
         type: Schema.Types.ObjectId,
-        ref: "Testcase",
+        ref: "Testscript",
         required: true,
     }],
-});
+   
+},
+{
+    timestamps: true,
+},);
 
 
 const Test = mongoose.model('Test', testSchema);

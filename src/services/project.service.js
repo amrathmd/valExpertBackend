@@ -2,7 +2,7 @@ const Project = require("../models/project.model");
 const RequirementSet = require("../models/requirementSet.model");
 const Requirement = require("../models/requirements.model");
 const Test = require("../models/testsets.model");
-const Testcase = require("../models/testcases.model");
+const Testscript = require("../models/testscripts.model");
 
 const createProject = async(projectBody) => {
     console.log("hii");
@@ -40,7 +40,7 @@ const deleteProject = async(projectId) => {
     }
     const requirementSetIds = project.requirementsets;
     const testsetIds = project.testsets;
-    await Testcase.deleteMany({ testsetId: { $in: testsetIds } });
+    await Testscript.deleteMany({ testsetId: { $in: testsetIds } });
     await Test.deleteMany({ _id: { $in: testsetIds } });
     await Requirement.deleteMany({ requirementSetId: { $in: requirementSetIds } });
     await Test.deleteMany({ _id: { $in: testsetIds } });

@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 
 const createTeststep = catchAsync(async (req, res) => {
     try {
-        const { testcaseId, stepNumber, description, expectedResult, requirementId } = req.body;
-        const result = await teststepsService.createTeststep(testcaseId, stepNumber, description, expectedResult, requirementId);
+        const { testscriptId, stepNumber, description, expectedResult, requirementId } = req.body;
+        const result = await teststepsService.createTeststep(testscriptId, stepNumber, description, expectedResult, requirementId);
         res.json(result);
     } catch (error) {
         console.error('Error creating test step:', error);

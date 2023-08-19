@@ -3,7 +3,7 @@ const RequirementSet = require("../models/requirementSet.model");
 const Project = require("../models/project.model");
 const Requirement = require("../models/requirements.model");
 const Test = require("../models/testsets.model");
-const Testcase = require("../models/testcases.model");
+const testscript = require("../models/testscripts.model");
 const { mongoose } = require("../config/config");
 
 const createRequirementSet = async (requirementSetBody) => {
@@ -53,7 +53,7 @@ const deleteRequirementSet = async (requirementSetId) => {
   const testSetId = requirementSet.testsetId;
   const testset = await Test.findById(testSetId);
   if (testset) {
-    await Testcase.deleteMany({ testsetId: testSetId });
+    await testscript.deleteMany({ testsetId: testSetId });
     await Project.updateOne(
       { _id: requirementSet.projectId },
       { $pull: { testsets: testSetId } }

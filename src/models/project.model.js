@@ -46,7 +46,7 @@ const projectSchema = new Schema({
     }],
     testsets: [{
         type: Schema.Types.ObjectId,
-        ref: "Project",
+        ref: "Test",
         required: true,
     }],
 }, {

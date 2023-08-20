@@ -47,12 +47,10 @@ const projectSchema = new Schema(
     scope: [
       {
         type: String,
-        required: true,
       },
     ],
     category: {
       type: String,
-      required: true,
     },
     description: {
       type: String,
@@ -60,7 +58,6 @@ const projectSchema = new Schema(
     },
     estimationDate: {
       type: Date,
-      required: true,
     },
     applicationName: {
       type: String,
@@ -73,7 +70,6 @@ const projectSchema = new Schema(
     },
     owner: {
       type: String,
-      required: true,
     },
     requirementsets: [
       {

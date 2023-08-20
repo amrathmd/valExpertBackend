@@ -1,38 +1,39 @@
-const { testscriptsService } = require('../services');
-const catchAsync = require('../utils/catchAsync');
+const { testscriptsService } = require("../services");
+const catchAsync = require("../utils/catchAsync");
 
-const createTestscript = catchAsync(async(req, res) => {
-    const result = await testscriptsService.createTestscript(req.body);
-    res.json(result);
-})
-
-const getTestscripts = catchAsync(async(req, res) => {
-    const allTestscripts = await testscriptsService.getTestscripts();
-    res.json(allTestscripts);
+const createTestscript = catchAsync(async (req, res) => {
+  const result = await testscriptsService.createTestscript(req.body);
+  res.json(result);
 });
 
-const getTestscriptById = catchAsync(async(req, res) => {
-    const { id } = req.params;
-    const testscript = await testscriptsService.getTestscriptById(id);
-    res.json(testscript);
+const getTestscripts = catchAsync(async (req, res) => {
+  const allTestscripts = await testscriptsService.getTestscripts();
+  res.json(allTestscripts);
 });
 
-const updateTestscript = catchAsync(async(req, res) => {
-    const { id } = req.params;
-    const updatedTestscript = await testscriptsService.updateTestscript(id, req.body);
-    res.json(updatedTestscript);
+const getTestscriptById = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const testscript = await testscriptsService.getTestscriptById(id);
+  res.json(testscript);
 });
 
-const deleteTestscript = catchAsync(async(req, res) => {
-    const { id } = req.params;
-    const deletedTestscript = await testscriptsService.deleteTestscript(id);
-    res.json(deletedTestscript);
+const updateTestscript = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const updatedTestscript = await testscriptsService.updateTestscript(
+    id,
+    req.body
+  );
+  res.json(updatedTestscript);
 });
 
-const getTestscriptByTestSetId=catchAsync(async(req,res)=>{
-    const {id}=req.params;
-    const testscript = await testscriptsService.getTestscriptByTestSetId(id);
-    res.json(testscript);
-})
+const deleteTestscript = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const deletedTestscript = await testscriptsService.deleteTestscript(id);
+  res.json(deletedTestscript);
+});
 
-module.exports = { createTestscript, getTestscripts, getTestscriptById, updateTestscript, deleteTestscript,getTestscriptByTestSetId };
+const getTestscriptByTestSetId = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const testscript = await testscriptsService.getTestscriptByTestSetId(id);
+  res.json(testscript);
+});

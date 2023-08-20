@@ -12,6 +12,7 @@ const requirementSchema = new mongoose.Schema({
     },
     requirementCategory: {
         type: String,
+        enum: ['User requirement', 'Functional Requirement', 'Technical Requirement', 'Physical Requirement', 'Regulatory Requirement', 'Other'],
         required: true,
     },
     verification: {
@@ -23,6 +24,10 @@ const requirementSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    author: {
+        type: String,
+        required: true,
+    }
 }, {
     timestamps: true
 });

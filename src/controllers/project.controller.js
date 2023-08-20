@@ -22,4 +22,12 @@ const deleteProject = catchAsync(async(req, res) => {
     await projectService.deleteProject(projectId);
     res.json({ message: 'Project deleted successfully' });
 });
-module.exports = { createProject, getProjects, getProjectById, deleteProject }
+
+const generatePDF = catchAsync(async (req, res) => {
+    const projectId = req.params.id;
+    const pdfBuffer = await projectService.generatePDF(projectId);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=project_${projectId}.pdf`);
+    res.send(pdfBuffer);
+  });
+module.exports = { createProject, getProjects, getProjectById, deleteProject, generatePDF }

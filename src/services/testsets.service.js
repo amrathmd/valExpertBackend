@@ -9,41 +9,42 @@ const catchAsync = require("../utils/catchAsync");
 //creating a Testsetfv
 
 const createTestsets = async (testsetsBody) => {
-    try {
-        const { projectId, requirementSetId, ...rest } = testsetsBody;
+  try {
+    const { projectId, requirementSetId, ...rest } = testsetsBody;
+    console.log(projectId);
+    console.log(requirementSetId);
 
-        const projectset = await Project.findOne({ _id: projectId });
-        const requirementSet = await RequirementSet.findOne({ _id: requirementSetId });
+    const projectset = await Project.findOne({ _id: projectId });
+    const requirementSet = await RequirementSet.findOne({
+      _id: requirementSetId,
+    });
 
-        if (!requirementSet || !projectset) {
-            throw new Error('RequirementSet or Project not found');
-        }
-
-        const test = new Test({
-            requirementSetId: requirementSet._id,
-            projectId: projectset._id,
-            testscripts: [],
-            ...rest,
-        });
-
-        const savedTestset = await test.save();
-
-        requirementSet.testsetId = savedTestset._id;
-        projectset.testsets.push(savedTestset._id);
-
-        await requirementSet.save();
-        await projectset.save();
-
-        return savedTestset;
-    } catch (error) {
-        console.log(error);
-        throw new Error('Error saving testsets');
+    if (!requirementSet || !projectset) {
+      throw new Error("RequirementSet or Project not found");
     }
 
-  
+    const test = new Test({
+      requirementSetId,
+      projectId,
+      testscripts: [],
+      ...rest,
+    });
+    console.log(test);
+
+    const savedTestset = await test.save();
+
+    requirementSet.testsetId = savedTestset._id;
+    projectset.testsets.push(savedTestset._id);
+
+    await requirementSet.save();
+    await projectset.save();
+
+    return savedTestset;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Error saving testsets");
+  }
 };
-
-
 
 //Retrieving all Testsets
 const getTestsets = async () => {
@@ -65,7 +66,6 @@ const getTestsetById = async (testsetId) => {
   }
 };
 
-
 const getTestSetsByProjectId = async (projectId) => {
   const testsets = await Test.find({ projectId: projectId });
   return testsets;
@@ -73,35 +73,36 @@ const getTestSetsByProjectId = async (projectId) => {
 
 const deleteTestset = async (testsetId) => {
   try {
-      const testset = await Test.findById(testsetId);
-      if (!testset) {
-          throw new Error("Error: Testset not found");
-      }
-      
-      const project = await Project.findById(testset.projectId);
-      const requirementSet = await RequirementSet.findById(testset.requirementSetId);
-      if (!requirementSet || !project) {
-          throw new Error("Error: RequirementSet or Project not found");
-      }
-      
-      const testscriptIds = await Testscript.distinct('_id', { testsetId });
+    const testset = await Test.findById(testsetId);
+    if (!testset) {
+      throw new Error("Error: Testset not found");
+    }
 
-      await Teststep.deleteMany({ testscriptId: { $in: testscriptIds } });
-      await Testscript.deleteMany({ _id: { $in: testscriptIds } });
+    const project = await Project.findById(testset.projectId);
+    const requirementSet = await RequirementSet.findById(
+      testset.requirementSetId
+    );
+    if (!requirementSet || !project) {
+      throw new Error("Error: RequirementSet or Project not found");
+    }
 
-      requirementSet.testsetId = null;
-      await requirementSet.save();
-      project.testsets.pull(testsetId);
-      await project.save();
+    const testscriptIds = await Testscript.distinct("_id", { testsetId });
 
-      const deletedTestset = await Test.findByIdAndDelete(testsetId);
+    await Teststep.deleteMany({ testscriptId: { $in: testscriptIds } });
+    await Testscript.deleteMany({ _id: { $in: testscriptIds } });
 
-      return deletedTestset;
+    requirementSet.testsetId = null;
+    await requirementSet.save();
+    project.testsets.pull(testsetId);
+    await project.save();
+
+    const deletedTestset = await Test.findByIdAndDelete(testsetId);
+
+    return deletedTestset;
   } catch (error) {
-      throw error;
+    throw error;
   }
 };
-
 
 module.exports = {
   createTestsets,

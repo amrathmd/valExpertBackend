@@ -37,3 +37,12 @@ const getTestscriptByTestSetId = catchAsync(async (req, res) => {
   const testscript = await testscriptsService.getTestscriptByTestSetId(id);
   res.json(testscript);
 });
+
+module.exports = {
+  getTestscriptById,
+  getTestscriptByTestSetId,
+  deleteTestscript,
+  updateTestscript,
+  getTestscripts,
+  createTestscript,
+};

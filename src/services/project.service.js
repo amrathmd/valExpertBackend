@@ -4,6 +4,8 @@ const Requirement = require("../models/requirements.model");
 const Test = require("../models/testsets.model");
 const Testscript = require("../models/testscripts.model");
 const Teststep = require("../models/teststeps.model");
+const PDFDocument = require('pdfkit');
+
 
 const createProject = async(projectBody) => {
     const projectStatus = new Project({
@@ -32,8 +34,6 @@ const getProjectById = async(projectId) => {
     }
     return project;
 };
-
-
 
 const deleteProject = async (projectId) => {
     try {
@@ -67,7 +67,56 @@ const deleteProject = async (projectId) => {
     }
 };
 
+const generatePDF = async (projectId) => {
+    try {
+        const project = await getProjectById(projectId);
+        const requirementSets = await RequirementSet.find({
+            _id: { $in: project.requirementsets }
+        });
 
+        const buffers = await generatePDFBuffer(project, requirementSets);
+        return buffers;
+    } catch (error) {
+        console.error('Error fetching project:', error);
+        throw error;
+    }
+};
 
+async function generatePDFBuffer(project, requirementSets) {
+    return new Promise((resolve) => {
+        const doc = new PDFDocument();
 
-module.exports = { createProject, getProjects, getProjectById, deleteProject }
+        doc.fontSize(24).fillColor('#003059').text('VALEXPERT', { align: 'center', bold: true });
+        doc.moveDown();
+
+        doc.fontSize(20).fillColor('#003059').text('Project Details', { align: 'center' });
+        doc.moveDown(0.5);
+        addText(doc, 'Project Name:', project.projectName);
+        addText(doc, 'Purpose:', project.purpose);
+        addText(doc, 'Status:', project.status);
+        addText(doc, 'Activation Date:', project.activationDate);
+        doc.moveDown();
+
+        doc.fontSize(20).fillColor('#003059').text('Requirement Sets', { align: 'center' });
+        doc.moveDown(0.5);
+        requirementSets.forEach((requirementSet, index) => {
+            doc.fontSize(14).fillColor('black').text(`Requirement Set ${index + 1}`);
+            addText(doc, 'Name:', requirementSet.name);
+            addText(doc, 'Status:', requirementSet.status);
+            doc.moveDown();
+        });
+
+        const buffers = [];
+        doc.on('data', buffer => buffers.push(buffer));
+        doc.on('end', () => resolve(Buffer.concat(buffers)));
+        doc.end();
+    });
+}
+
+function addText(doc, label, value) {
+    doc.fontSize(12).fillColor('black');
+    doc.font('Helvetica-Bold').text(`${label}:`, { continued: true });
+    doc.font('Helvetica').text(` ${value}`);
+}
+
+module.exports = { createProject, getProjects, getProjectById, deleteProject, generatePDF }

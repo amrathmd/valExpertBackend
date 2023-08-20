@@ -12,4 +12,6 @@ router
     .get(projectController.getProjectById)
     .delete(projectController.deleteProject);
 
+router.get('/:id/generate-pdf', projectController.generatePDF);
+
 module.exports = router;

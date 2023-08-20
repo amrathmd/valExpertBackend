@@ -30,8 +30,10 @@ const deleteTestscript = catchAsync(async(req, res) => {
 });
 
 const getTestscriptByTestSetId=catchAsync(async(req,res)=>{
-    const {testscriptId}=req.params;
-    const testscript = await testscriptsService.getTestscriptByTestSetId(testscriptId);
+    
+    const {id}=req.params;
+    console.log(id);
+    const testscript = await testscriptsService.getTestscriptByTestSetId(id);
     res.json(testscript);
 })
 

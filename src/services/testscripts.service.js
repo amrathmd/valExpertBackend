@@ -9,17 +9,27 @@ const createTestscript = async(testscriptBody) => {
         const { testsetId, ...test } = testscriptBody;
 
         const testset = await Test.findOne({ _id: testsetId });
-        if (!testset) {
-            throw new Error('Testset not found');
-        }
-        const testscript = new Testscript({
-            testsetId: testset._id,
-            teststeps: [],
-            ...test,
-        });
-        const savedTestscript = await testscript.save();
-        testset.testscript.push(savedTestscript._id);
-        await testset.save();
+if (!testset) {
+    throw new Error('Testset not found');
+}
+console.log('Found testset:', testset);
+
+const testscript = new Testscript({
+    testsetId: testset._id,
+    teststeps: [],
+    ...test,
+});
+console.log('Creating testscript:', testscript);
+
+const savedTestscript = await testscript.save();
+console.log('Saved testscript:', savedTestscript);
+
+testset.testscripts.push(savedTestscript._id);
+console.log('Pushing to testset.testscripts:', testset.testscripts);
+
+await testset.save();
+
+      
         return savedTestscript;
     } catch (error) {
         console.log(error);
@@ -85,8 +95,9 @@ const deleteTestscript = async(testscriptId) => {
 };
 
 const getTestscriptByTestSetId=async(testsetId)=>{
+    console.log(testsetId);
         const testscripts = await Testscript.find({ testsetId: testsetId });
-        console.log(testCases);
+        console.log(testscripts);
         return testscripts;
  
     

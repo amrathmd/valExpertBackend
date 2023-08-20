@@ -3,6 +3,7 @@ const catchAsync = require("../utils/catchAsync");
 const mongoose = require("mongoose");
 
 const createTestsets = catchAsync(async (req, res) => {
+  console.log(req.body);
   const result = await testsetsService.createTestsets(req.body);
   res.json(result);
 });

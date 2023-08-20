@@ -45,9 +45,6 @@ const getRequirementSetById = async (requirementSetId) => {
   return requirementSet;
 };
 
-
-
-
 const deleteRequirementSet = async (requirementSetId) => {
   try {
     const requirementSet = await RequirementSet.findById(requirementSetId);
@@ -60,11 +57,13 @@ const deleteRequirementSet = async (requirementSetId) => {
       const testset = await Test.findById(testSetId);
       if (testset) {
         const testscriptIds = testset.testscripts;
-        
-        const teststepIds = await Testscript.find({ _id: { $in: testscriptIds } }).distinct('teststeps');
+
+        const teststepIds = await Testscript.find({
+          _id: { $in: testscriptIds },
+        }).distinct("teststeps");
         await Teststep.deleteMany({ _id: { $in: teststepIds } });
         await Testscript.deleteMany({ _id: { $in: testscriptIds } });
-        
+
         await Project.updateOne(
           { _id: requirementSet.projectId },
           { $pull: { testsets: testSetId } }
@@ -90,8 +89,10 @@ const deleteRequirementSet = async (requirementSetId) => {
     throw error;
   }
 };
-
-
+const getRequirementSetByProjectId = async (projectId) => {
+  const requirementSet = await RequirementSet.find({ projectId });
+  return requirementSet;
+};
 
 module.exports = {
   createRequirementSet,
@@ -99,4 +100,5 @@ module.exports = {
   getRequirementSetById,
   deleteRequirementSet,
   getRequirementSetById,
+  getRequirementSetByProjectId,
 };

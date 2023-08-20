@@ -3,7 +3,8 @@ const RequirementSet = require("../models/requirementSet.model");
 const Project = require("../models/project.model");
 const Requirement = require("../models/requirements.model");
 const Test = require("../models/testsets.model");
-const Testcase = require("../models/testcases.model");
+const Testscript = require("../models/testscripts.model");
+const Teststep = require("../models/teststeps.model");
 const { mongoose } = require("../config/config");
 
 const createRequirementSet = async (requirementSetBody) => {
@@ -44,41 +45,58 @@ const getRequirementSetById = async (requirementSetId) => {
   return requirementSet;
 };
 
-const deleteRequirementSet = async (requirementSetId) => {
-  const requirementSet = await RequirementSet.findById(requirementSetId);
-  if (!requirementSet) {
-    throw new Error("Error: RequirementSet not found");
-  }
 
-  const testSetId = requirementSet.testsetId;
-  const testset = await Test.findById(testSetId);
-  if (testset) {
-    await Testcase.deleteMany({ testsetId: testSetId });
+
+
+const deleteRequirementSet = async (requirementSetId) => {
+  try {
+    const requirementSet = await RequirementSet.findById(requirementSetId);
+    if (!requirementSet) {
+      throw new Error("Error: RequirementSet not found");
+    }
+
+    const testSetId = requirementSet.testsetId;
+    if (testSetId) {
+      const testset = await Test.findById(testSetId);
+      if (testset) {
+        const testscriptIds = testset.testscripts;
+        
+        const teststepIds = await Testscript.find({ _id: { $in: testscriptIds } }).distinct('teststeps');
+        await Teststep.deleteMany({ _id: { $in: teststepIds } });
+        await Testscript.deleteMany({ _id: { $in: testscriptIds } });
+        
+        await Project.updateOne(
+          { _id: requirementSet.projectId },
+          { $pull: { testsets: testSetId } }
+        );
+
+        await Test.findByIdAndDelete(testSetId);
+      }
+    }
+
+    await Requirement.deleteMany({ requirementSetId });
+
     await Project.updateOne(
       { _id: requirementSet.projectId },
-      { $pull: { testsets: testSetId } }
+      { $pull: { requirementsets: requirementSetId } }
     );
-    await Test.findByIdAndDelete(testSetId);
+
+    const deletedRequirementSet = await RequirementSet.findByIdAndDelete(
+      requirementSetId
+    );
+
+    return deletedRequirementSet;
+  } catch (error) {
+    throw error;
   }
-  await Requirement.deleteMany({ requirementSetId });
-  await Project.updateOne(
-    { _id: requirementSet.projectId },
-    { $pull: { requirementsets: requirementSetId } }
-  );
-  const deletedRequirementSet = await RequirementSet.findByIdAndDelete(
-    requirementSetId
-  );
-  return deletedRequirementSet;
 };
-const getRequirementSetByProjectId = async (projectId) => {
-  const requirementSet = await RequirementSet.find({ projectId: projectId });
-  return requirementSet;
-};
+
+
 
 module.exports = {
   createRequirementSet,
   getRequirementSets,
   getRequirementSetById,
   deleteRequirementSet,
-  getRequirementSetByProjectId,
+  getRequirementSetById,
 };

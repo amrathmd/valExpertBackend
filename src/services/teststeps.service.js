@@ -1,15 +1,15 @@
 const Teststep = require('../models/teststeps.model');
-const Testcase = require('../models/testcases.model');
+const Testscript = require('../models/testscripts.model');
 const catchAsync = require('../utils/catchAsync');
 
 
-const createTeststep = async (testcaseId, stepNumber, description, expectedResult, requirementIds) => {
+const createTeststep = async (testscriptId, stepNumber, description, expectedResult, requirementIds) => {
   try {
-    if (!testcaseId || !stepNumber || !description || !expectedResult || !Array.isArray(requirementIds)) {
+    if (!testscriptId || !stepNumber || !description || !expectedResult || !Array.isArray(requirementIds)) {
       throw new Error('Invalid input data.');
     }
 
-    const testcase = await Testcase.findById(testcaseId)
+    const testscript = await Testscript.findById(testscriptId)
       .populate({
         path: 'testsetId',
         populate: {
@@ -21,18 +21,18 @@ const createTeststep = async (testcaseId, stepNumber, description, expectedResul
       })
       .exec();
 
-    if (!testcase) {
-      throw new Error('Testcase not found.');
+    if (!testscript) {
+      throw new Error('Testscript not found.');
     }
 
-    const requirementSet = testcase.testsetId.requirementSetId;
+    const requirementSet = testscript.testsetId.requirementSetId;
 
     const validRequirementIds = requirementIds.filter((reqId) =>
       requirementSet.requirements.some((req) => req._id.equals(reqId))
     );
 
     const teststep = new Teststep({
-      testcaseId,
+      testscriptId,
       stepNumber,
       description,
       expectedResult,
@@ -40,11 +40,10 @@ const createTeststep = async (testcaseId, stepNumber, description, expectedResul
     });
 
     const savedTeststep = await teststep.save();
-    await Testcase.updateOne(
-      { _id: testcaseId },
+    await Testscript.updateOne(
+      { _id: testscriptId },
       { $push: { teststeps: savedTeststep._id } }
     );
-
     return savedTeststep;
   } catch (error) {
   
@@ -75,19 +74,20 @@ const getTeststepById = async (id) => {
   }
 };
 
-const deleteTeststep = async (id) => {
+const deleteTeststep = async (teststepId) => {
   try {
-    const teststep = await Teststep.findById(id);
+    const teststep = await Teststep.findById(teststepId);
 
     if (!teststep) {
-      throw new Error('Test step not found.');
+     throw new Error('Test step not found.');
     }
-    await Testcase.updateOne(
-      { _id: teststep.testcaseId },
+    
+    await Testscript.updateOne(
+      { _id: teststep.testscriptId },
       { $pull: { teststeps: teststep._id } }
     );
 
-    const deletedTeststep = await teststep.delete();
+    const deletedTeststep = await teststep.deleteOne();
     return deletedTeststep;
   } catch (error) {
     console.error('Error deleting test step:', error);
@@ -95,9 +95,10 @@ const deleteTeststep = async (id) => {
   }
 };
 
-const getTestStepsByTestcaseId= async(testcaseId)=>{
-  console.log(testcaseId)
-  const testSteps=await Teststep.find({testcaseId:testcaseId})
+
+const getTestStepsByTestcaseId= async(testscriptId)=>{
+  console.log(testscriptId)
+  const testSteps=await Teststep.find({testscriptId:testscriptId})
   return testSteps;
 }
 module.exports = { createTeststep, getTeststeps, getTeststepById, deleteTeststep,getTestStepsByTestcaseId};

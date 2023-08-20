@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const testcaseSchema = new mongoose.Schema({
+const testscriptSchema = new mongoose.Schema({
     testsetId: {
         type: Schema.Types.ObjectId,
         ref: 'Test',
@@ -41,6 +41,6 @@ const testcaseSchema = new mongoose.Schema({
     timestamps: true
 });
 
-const Testcase = mongoose.model('Testcase', testcaseSchema);
+const Testscript = mongoose.model('Testscript', testscriptSchema);
 
-module.exports = Testcase;
+module.exports = Testscript;

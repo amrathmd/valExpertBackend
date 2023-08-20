@@ -42,7 +42,7 @@ async function sendEmailWithPassword(email, password) {
     Source: "valexpert.us@gmail.com",
   };
 
-  await ses.sendEmail(emailParams).promise();
+  //await ses.sendEmail(emailParams).promise();
   try {
     const result = await ses.sendEmail(emailParams).promise();
     console.log('Email sent successfully:', result);

@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const teststepsSchema = new mongoose.Schema({
-    testcaseId: {
+    testscriptId: {
         type: Schema.Types.ObjectId,
-        ref: 'Testcase',
+        ref: 'Testscript',
         required: true,
     },
     stepNumber: {

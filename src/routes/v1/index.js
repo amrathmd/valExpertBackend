@@ -6,7 +6,7 @@ const config = require("../../config/config");
 const authRoute = require("./auth.route");
 const projectRoute = require('./project.route');
 const testsetsRoute = require("./testsets.route");
-const testcaseRoute = require("./testcases.route");
+const testscriptRoute = require("./testscripts.route");
 const teststepRoute = require("./teststeps.route");
 const requirementsRoute = require("./requirements.route");
 const requirementsetRoute = require("./requirementSet.route");
@@ -48,8 +48,8 @@ const defaultRoutes = [{
         route: requirementsRoute,
     },
     {
-        path: "/testcases",
-        route: testcaseRoute,
+        path: "/testscripts",
+        route: testscriptRoute,
     },
     {
         path: "/teststeps",

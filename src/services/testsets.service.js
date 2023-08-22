@@ -26,14 +26,14 @@ const createTestsets = async (testsetsBody) => {
 
     
     // Check for the latest version of the test set
-    const latestVersion = await Test.findOne({ projectId }).sort({ version: -1 });
+    // const latestVersion = await Test.findOne({ projectId }).sort({ version: -1 });
 
-    // Calculate the new version based on the latest version
-    const newVersion = latestVersion ? incrementVersion(latestVersion.version) : "1.0.0";
+    // // Calculate the new version based on the latest version
+    // const newVersion = latestVersion ? incrementVersion(latestVersion.version) : "1.0.0";
     const test = new Test({
       requirementSetId,
       projectId,
-      version: newVersion,
+     // version: newVersion,
       testscripts: [],
       ...rest,
     });

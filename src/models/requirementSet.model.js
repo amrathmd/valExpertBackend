@@ -21,7 +21,6 @@ const requirementSetSchema = new Schema({
     },
      version: {
         type: String,
-        required: true,
      },
     requirements: [{
         type: Schema.Types.ObjectId,
@@ -31,12 +30,12 @@ const requirementSetSchema = new Schema({
 }, { timestamps: true });
 
 
-requirementSetSchema.pre("save", function (next) {
-    if (this.isNew) {
-        this.version = incrementVersion(this.version);
-    }
-    next();
-});
+// requirementSetSchema.pre("save", function (next) {
+//     if (this.isNew) {
+//         this.version = incrementVersion(this.version);
+//     }
+//     next();
+// });
 
 const RequirementSet = mongoose.model('RequirementSet', requirementSetSchema);
 

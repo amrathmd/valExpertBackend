@@ -19,14 +19,14 @@ const createRequirementSet = async (requirementSetBody) => {
       throw new Error("Project not found");
     }
     // Check for the latest version of the requirement set
-    const latestVersion = await RequirementSet.findOne({ projectId }).sort({ version: -1 });
+    // const latestVersion = await RequirementSet.findOne({ projectId }).sort({ version: -1 });
 
-    // Calculate the new version based on the latest version
-    const newVersion = latestVersion ? incrementVersion(latestVersion.version) : "1.0.0";
+    // // Calculate the new version based on the latest version
+    // const newVersion = latestVersion ? incrementVersion(latestVersion.version) : "1.0.0";
     const requirementset = new RequirementSet({
       requirements: [],
       projectId: projectSet._id,
-      version: newVersion,
+     // version: newVersion,
       ...set,
     });
 

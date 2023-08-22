@@ -47,7 +47,6 @@ const testSchema = new mongoose.Schema(
     },
     version: {
       type: String,
-      required: true,
     },
     testscripts: [
       {
@@ -62,12 +61,12 @@ const testSchema = new mongoose.Schema(
   }
 );
 
-testSchema.pre("save", function (next) {
-  if (this.isNew) {
-      this.version = incrementVersion(this.version);
-  }
-  next();
-});
+// testSchema.pre("save", function (next) {
+//   if (this.isNew) {
+//       this.version = incrementVersion(this.version);
+//   }
+//   next();
+// });
 
 const Test = mongoose.model("Test", testSchema);
 module.exports = Test;

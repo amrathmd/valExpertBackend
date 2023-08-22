@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+const { incrementVersion } = require("../utils/versionUtils");
 
 const testSchema = new mongoose.Schema(
   {
@@ -44,6 +45,10 @@ const testSchema = new mongoose.Schema(
       enum: ["Draft", "In Review", "Ready for Execution", "Approved"],
       required: true,
     },
+    version: {
+      type: String,
+      required: true,
+    },
     testscripts: [
       {
         type: Schema.Types.ObjectId,
@@ -56,6 +61,13 @@ const testSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+testSchema.pre("save", function (next) {
+  if (this.isNew) {
+      this.version = incrementVersion(this.version);
+  }
+  next();
+});
 
 const Test = mongoose.model("Test", testSchema);
 module.exports = Test;

@@ -12,7 +12,7 @@ const requirementSchema = new mongoose.Schema({
     },
     requirementCategory: {
         type: String,
-        enum: ['User requirement', 'Functional Requirement', 'Technical Requirement', 'Physical Requirement', 'Regulatory Requirement', 'Other'],
+        enum: ['User Requirement', 'Functional Requirement', 'Technical Requirement', 'Physical Requirement', 'Regulatory Requirement', 'Other'],
         required: true,
     },
     verification: {

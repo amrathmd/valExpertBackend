@@ -85,6 +85,7 @@ const generatePDF = async (projectId) => {
 async function generatePDFBuffer(project, requirementSets) {
     return new Promise((resolve) => {
         const doc = new PDFDocument();
+        doc.image('./src/static/images/logoicon.png', 50, 50, { width: 100 });
 
         doc.fontSize(24).fillColor('#003059').text('VALEXPERT', { align: 'center', bold: true });
         doc.moveDown();

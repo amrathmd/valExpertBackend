@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const { incrementVersion } = require("../utils/versionUtils");
 const requirementSetSchema = new Schema({
     name: {
         type: String,
@@ -18,15 +19,24 @@ const requirementSetSchema = new Schema({
             type:Schema.Types.ObjectId,
             ref:'Test',
     },
-    // version: {
-
-    // },
+     version: {
+        type: String,
+        required: true,
+     },
     requirements: [{
         type: Schema.Types.ObjectId,
         ref: "Requirement",
         
     }],
 }, { timestamps: true });
+
+
+requirementSetSchema.pre("save", function (next) {
+    if (this.isNew) {
+        this.version = incrementVersion(this.version);
+    }
+    next();
+});
 
 const RequirementSet = mongoose.model('RequirementSet', requirementSetSchema);
 

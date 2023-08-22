@@ -5,6 +5,9 @@ const Requirement = require("../models/requirements.model");
 const Test = require("../models/testsets.model");
 const Testscript = require("../models/testscripts.model");
 const Teststep = require("../models/teststeps.model");
+const { incrementVersion } = require("../utils/versionUtils");
+
+
 const { mongoose } = require("../config/config");
 
 const createRequirementSet = async (requirementSetBody) => {
@@ -15,10 +18,15 @@ const createRequirementSet = async (requirementSetBody) => {
     if (!projectSet) {
       throw new Error("Project not found");
     }
+    // Check for the latest version of the requirement set
+    const latestVersion = await RequirementSet.findOne({ projectId }).sort({ version: -1 });
 
+    // Calculate the new version based on the latest version
+    const newVersion = latestVersion ? incrementVersion(latestVersion.version) : "1.0.0";
     const requirementset = new RequirementSet({
       requirements: [],
       projectId: projectSet._id,
+      version: newVersion,
       ...set,
     });
 
@@ -31,6 +39,8 @@ const createRequirementSet = async (requirementSetBody) => {
     throw new Error("Error saving requirementSet");
   }
 };
+
+
 
 const getRequirementSets = async () => {
   const requirementSets = await RequirementSet.find().sort({ createdAt: -1 });

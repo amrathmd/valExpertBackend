@@ -5,6 +5,7 @@ const Testscript = require("../models/testscripts.model");
 const Teststep = require("../models/teststeps.model");
 const Project = require("../models/project.model");
 const catchAsync = require("../utils/catchAsync");
+const { incrementVersion } = require("../utils/versionUtils");
 
 //creating a Testsetfv
 
@@ -23,9 +24,16 @@ const createTestsets = async (testsetsBody) => {
       throw new Error("RequirementSet or Project not found");
     }
 
+    
+    // Check for the latest version of the test set
+    const latestVersion = await Test.findOne({ projectId }).sort({ version: -1 });
+
+    // Calculate the new version based on the latest version
+    const newVersion = latestVersion ? incrementVersion(latestVersion.version) : "1.0.0";
     const test = new Test({
       requirementSetId,
       projectId,
+      version: newVersion,
       testscripts: [],
       ...rest,
     });

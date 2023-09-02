@@ -19,9 +19,14 @@ const teststepsSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    requirementId: [{
+    requirements: [{
         type: Schema.Types.ObjectId,
         ref: "Requirement",
+        required: true,
+    }],
+    bugs: [{
+        type: Schema.Types.ObjectId,
+        ref: "Bug",
         required: true,
     }],
 });

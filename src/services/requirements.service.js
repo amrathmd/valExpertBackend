@@ -17,6 +17,8 @@ const createRequirements = async(requirementBody) => {
 
         const requirement = new Requirement({
             requirementSetId: requirementSet._id,
+            testscripts: [],
+            teststeps: [],
             ...rest,
         });
 

@@ -11,6 +11,10 @@ const testscriptSchema = new mongoose.Schema({
         type: String,
         required:true,
     },
+    number: {
+        type: Number,
+        required: true,
+    },
     purpose: {
         type: String,
         required: true,
@@ -37,6 +41,21 @@ const testscriptSchema = new mongoose.Schema({
         ref: "Teststep",
         required: true,
     }],
+    requirements: [{
+        type: Schema.Types.ObjectId,
+        ref: "Requirement",
+        required: true,
+    }],
+    run: [{
+        type: Schema.Types.ObjectId,
+        ref: "Run",
+        required: true,
+    }],
+    bugs: [{
+        type: Schema.Types.ObjectId,
+        ref: "Bug",
+        required: true,
+    }]
 }, {
     timestamps: true
 });

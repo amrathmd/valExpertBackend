@@ -25,7 +25,6 @@ const requirementSetSchema = new Schema({
     requirements: [{
         type: Schema.Types.ObjectId,
         ref: "Requirement",
-        
     }],
 }, { timestamps: true });
 

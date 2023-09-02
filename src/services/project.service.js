@@ -11,7 +11,6 @@ const createProject = async(projectBody) => {
     const projectStatus = new Project({
         requirementsets: [],
         testsets: [],
-        scope:[],
         ...projectBody,
     });
     const createdProject = await projectStatus.save();

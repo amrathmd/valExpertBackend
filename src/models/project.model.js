@@ -5,25 +5,17 @@ const { Schema } = mongoose;
 
 const projectSchema = new Schema(
   {
-    projectName: {
+    purpose: {
       type: String,
       required: true,
     },
-    purpose: {
+    projectName: {
       type: String,
       required: true,
     },
     status: {
       type: String,
       enum: ["Active", "Inactive"],
-      required: true,
-    },
-    activationDate: {
-      type: Date,
-      required: true,
-    },
-    inactivationDate: {
-      type: Date,
       required: true,
     },
     facility: [
@@ -56,7 +48,15 @@ const projectSchema = new Schema(
       type: String,
       required: true,
     },
-    estimationDate: {
+    // activationDate: {
+    //   type: Date,
+    //   required: true,
+    // },
+    // inactivationDate: {
+    //   type: Date,
+    //   required: true,
+    // },
+    implementationDate: {
       type: Date,
     },
     applicationName: {

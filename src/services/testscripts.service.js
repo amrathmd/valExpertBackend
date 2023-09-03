@@ -2,20 +2,27 @@ const mongoose = require("mongoose");
 const Testscript = require("../models/testscripts.model");
 const Test = require("../models/testsets.model");
 const Teststep = require("../models/teststeps.model");
+const Requirement = require("../models/requirements.model");
 
 const createTestscript = async (testscriptBody) => {
   try {
+    console.log(testscriptBody);
     const { testsetId, ...test } = testscriptBody;
 
     const testset = await Test.findOne({ _id: testsetId });
     if (!testset) {
       throw new Error("Testset not found");
     }
+
     const testscript = new Testscript({
       testsetId: testset._id,
       teststeps: [],
+      requirements: [],
+      run: [],
+      bugs: [],
       ...test,
     });
+
     const savedTestscript = await testscript.save();
     testset.testscripts.push(savedTestscript._id);
     await testset.save();
@@ -64,7 +71,26 @@ const updateTestscript = async (testscriptId, updateData) => {
     throw new Error("Error updating Testscript");
   }
 };
+const updateRequirements = async (testscriptId, newRequirements) => {
+  try {
+    const existingTestscript = await Testscript.findById(testscriptId);
 
+    if (!existingTestscript) {
+      throw new Error('Testscript not found');
+    }
+
+    existingTestscript.requirements = [
+      ...existingTestscript.requirements,
+      ...newRequirements,
+    ];
+
+    const updatedTestscript = await existingTestscript.save();
+
+    return updatedTestscript;
+  } catch (error) {
+    throw new Error('Error updating requirements');
+  }
+};
 const deleteTestscript = async (testscriptId) => {
   try {
     console.log(testscriptId);
@@ -97,6 +123,46 @@ const getTestscriptByTestSetId = async (testsetId) => {
   return testscripts;
 };
 
+const getTestscriptsByRequirement = async (requirementId) => {
+  try {
+    const requirement = await Requirement.findById(requirementId).populate('testscripts');
+
+    if (!requirement) {
+      throw new Error('Requirement not found');
+    }
+    const testscripts = requirement.testscripts;
+    return testscripts;
+  } catch (error) {
+    throw new Error('Error fetching testscripts by requirement');
+  }
+};
+
+const updateTestscriptRequirement = async (testscriptId, requirements) => {
+  try {
+      const existingTestscripts = await Testscript.findById(testscriptId);
+  
+      if (!existingTestscripts) {
+        throw new Error('Testscript not found');
+      }
+  
+      existingTestscripts.requirements = [
+        ...existingTestscripts.requirements,
+        ...requirements,
+      ];
+  
+      const updatedRequirement = await existingTestscripts.save();
+  
+      return updatedRequirement;
+    } catch (error) {
+      throw new Error('Error updating Testscripts');
+    }
+}
+
+module.exports = {
+  getTestscriptsByRequirement,
+};
+
+
 module.exports = {
   createTestscript,
   getTestscripts,
@@ -104,4 +170,7 @@ module.exports = {
   updateTestscript,
   deleteTestscript,
   getTestscriptByTestSetId,
+  updateRequirements,
+  getTestscriptsByRequirement,
+  updateTestscriptRequirement,
 };

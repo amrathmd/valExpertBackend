@@ -38,4 +38,41 @@ const getRequirementsByRequirementSetId = catchAsync(async (req, res) => {
     res.json(requirements);
 });
 
-module.exports = { createRequirements, getRequirements, getRequirementById, updateRequirement, deleteRequirement , getRequirementsByRequirementSetId};
+const getRequirementsByTestsetId = catchAsync(async (req, res) => {
+    const { testsetId } = req.params;
+    const requirements = await requirementsService.getRequirementsByTestsetId(testsetId);
+    res.json(requirements);
+});
+  
+const getRequirementsByTestscriptId = catchAsync(async (req, res) => {
+    const { testscriptId } = req.params;
+    const requirements = await requirementsService.getRequirementsByTestscriptId(testscriptId);
+    res.json(requirements);
+  });
+
+  const updateRequirementTetscripts = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const { testscripts } = req.body;
+    const updatedTestscripts = await requirementsService.updateRequirementTetscripts(id, testscripts );
+    res.json(updatedTestscripts);
+  })
+
+  const updateRequirementTetsteps = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const { teststeps } = req.body;
+    const updatedTeststeps = await requirementsService.updateRequirementTetsteps(id, teststeps );
+    res.json(updatedTeststeps);
+  })
+  
+module.exports = { 
+    createRequirements, 
+    getRequirements, 
+    getRequirementById, 
+    updateRequirement, 
+    deleteRequirement , 
+    getRequirementsByRequirementSetId,
+    getRequirementsByTestsetId,
+    getRequirementsByTestscriptId,
+    updateRequirementTetscripts,
+    updateRequirementTetsteps,
+};

@@ -71,6 +71,33 @@ const getRequirementsByRequirementSetId = async (requirementSetId) => {
         throw new Error('Error retrieving requirement details');
     }
 };
+const getRequirementsByTestsetId = async (testsetId) => {
+    try {
+      const requirementSet = await RequirementSet.findOne({ testsetId }).exec();
+      if (!requirementSet) {
+        throw new Error('Requirementset not found for the given TestsetId');
+      }
+      const requirements = await Requirement.find({ requirementSet: requirementSet._id }).exec();
+      return requirements;
+    } catch (error) {
+      console.error(error);
+      throw new Error('Error fetching requirements by TestsetId');
+    }
+  };
+  
+const getRequirementsByTestscriptId = async (testscriptId) => {
+    try {
+      const testscript = await Testscript.findOne({ _id: testscriptId }).exec();
+      if (!testscript) {
+        throw new Error('Testscript not found for the given TestscriptId');
+      }
+      const requirements = await Requirement.find({ _id: { $in: testscript.requirements } }).exec();
+      return requirements;
+    } catch (error) {
+      console.error(error);
+      throw new Error('Error fetching requirements by TestscriptId');
+    }
+  };
 const updateRequirement = async(requirementId, updateData) => {
     try {
         const requirement = await Requirement.findByIdAndUpdate(
@@ -121,6 +148,47 @@ const deleteRequirement = async (requirementId) => {
     }
 };
 
+const updateRequirementTetscripts = async (requirementId, testscripts) => {
+    try {
+        const existingRequirements = await Requirement.findById(requirementId);
+    
+        if (!existingRequirements) {
+          throw new Error('Requirement not found');
+        }
+    
+        existingRequirements.testscripts = [
+          ...existingRequirements.testscripts,
+          ...testscripts,
+        ];
+    
+        const updatedRequirement = await existingRequirements.save();
+    
+        return updatedRequirement;
+      } catch (error) {
+        throw new Error('Error updating requirements');
+      }
+}
+
+const updateRequirementTetsteps = async (requirementId, teststeps) => {
+    try {
+        const existingRequirements = await Requirement.findById(requirementId);
+    
+        if (!existingRequirements) {
+          throw new Error('Testscript not found');
+        }
+    
+        existingRequirements.teststeps = [
+          ...existingRequirements.teststeps,
+          ...teststeps,
+        ];
+    
+        const updatedRequirement = await existingRequirements.save();
+    
+        return updatedRequirement;
+      } catch (error) {
+        throw new Error('Error updating requirements');
+      }
+}
 
 module.exports = {
     createRequirements,
@@ -129,4 +197,8 @@ module.exports = {
     updateRequirement,
     deleteRequirement,
     getRequirementsByRequirementSetId,
+    getRequirementsByTestsetId,
+    getRequirementsByTestscriptId,
+    updateRequirementTetscripts,
+    updateRequirementTetsteps
 };

@@ -9,7 +9,7 @@ const testscriptSchema = new mongoose.Schema({
     },
     Type: {
         type: String,
-        required:true,
+        required: true,
     },
     number: {
         type: Number,

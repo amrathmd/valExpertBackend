@@ -10,5 +10,12 @@ router
 router.route('/:id')
     .get(teststepsController.getTeststepById)
     .delete(teststepsController.deleteTeststep);
-router.route('/testcases/:id').get(teststepsController.getTestStepsByTestcaseId)
+router.route('/testcases/:id')
+    .get(teststepsController.getTestStepsByTestcaseId);
+
+router.route('requirements/:id')
+    .get(teststepsController.getTeststepsByRequirement);
+
+router.route('/:id/update')
+    .get(teststepsController.updateTeststepRequirement);
 module.exports = router;

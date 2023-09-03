@@ -26,6 +26,15 @@ const updateTestscript = catchAsync(async (req, res) => {
   res.json(updatedTestscript);
 });
 
+const updateRequirements = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const updatedRequirements = await testscriptsService.updateRequirements(
+    id,
+    req.body
+  );
+  res.json(updatedRequirements);
+})
+
 const deleteTestscript = catchAsync(async (req, res) => {
   const { id } = req.params;
   const deletedTestscript = await testscriptsService.deleteTestscript(id);
@@ -38,6 +47,18 @@ const getTestscriptByTestSetId = catchAsync(async (req, res) => {
   res.json(testscript);
 });
 
+const getTestscriptsByRequirement = catchAsync(async (req, res) => {
+  const { id} = req.params;
+  const testscript = await testscriptsService.getTestscriptsByRequirement(id);
+  res.json(testscript);
+})
+
+const updateTestscriptRequirement = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const { requirements } = req.body;
+  const updatedTestscripts = await requirementsService.updateTestscriptRequirement(id, requirements );
+  res.json(updatedTestscripts);
+})
 module.exports = {
   getTestscriptById,
   getTestscriptByTestSetId,
@@ -45,4 +66,7 @@ module.exports = {
   updateTestscript,
   getTestscripts,
   createTestscript,
+  updateRequirements,
+  getTestscriptsByRequirement,
+  updateTestscriptRequirement
 };

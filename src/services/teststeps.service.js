@@ -3,42 +3,14 @@ const Testscript = require('../models/testscripts.model');
 const catchAsync = require('../utils/catchAsync');
 
 
-const createTeststep = async (testscriptId, stepNumber, description, expectedResult, requirementIds) => {
+const createTeststep = async (testStep) => {
   try {
-    if (!testscriptId || !stepNumber || !description || !expectedResult || !Array.isArray(requirementIds)) {
-      throw new Error('Invalid input data.');
-    }
-
-    const testscript = await Testscript.findById(testscriptId)
-      .populate({
-        path: 'testsetId',
-        populate: {
-          path: 'requirementSetId',
-          populate: {
-            path: 'requirements',
-          },
-        },
-      })
-      .exec();
-
-    if (!testscript) {
-      throw new Error('Testscript not found.');
-    }
-
-    const requirementSet = testscript.testsetId.requirementSetId;
-
-    const validRequirementIds = requirementIds.filter((reqId) =>
-      requirementSet.requirements.some((req) => req._id.equals(reqId))
-    );
-
-    const teststep = new Teststep({
-      testscriptId,
-      stepNumber,
-      description,
-      expectedResult,
-      requirementId: validRequirementIds,
-    });
-
+    
+    const {testscriptId} = testStep;
+    const teststep = new Teststep(
+      testStep);
+    
+      
     const savedTeststep = await teststep.save();
     await Testscript.updateOne(
       { _id: testscriptId },
@@ -97,8 +69,8 @@ const deleteTeststep = async (teststepId) => {
 
 
 const getTestStepsByTestcaseId= async(testscriptId)=>{
-  console.log(testscriptId)
-  const testSteps=await Teststep.find({testscriptId:testscriptId})
+  const testSteps=await Teststep.find({testscriptId:testscriptId});
+  console.log(testSteps);
   return testSteps;
 }
 module.exports = { createTeststep, getTeststeps, getTeststepById, deleteTeststep,getTestStepsByTestcaseId};

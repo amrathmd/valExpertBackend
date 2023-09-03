@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const testscriptSchema = new mongoose.Schema({
+    testCaseNumber: {
+        type: Number,
+        required : true
+    },
     testsetId: {
         type: Schema.Types.ObjectId,
         ref: 'Test',
@@ -19,7 +23,7 @@ const testscriptSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    prerequesites: {
+    prerequisites: {
         type: String,
         required: true,
     },

@@ -6,7 +6,7 @@ const Teststep = require("../models/teststeps.model");
 const createTestscript = async (testscriptBody) => {
   try {
     const { testsetId, ...test } = testscriptBody;
-
+    console.log(testscriptBody)
     const testset = await Test.findOne({ _id: testsetId });
     if (!testset) {
       throw new Error("Testset not found");
@@ -37,7 +37,7 @@ const getTestscripts = async () => {
 
 const getTestscriptById = async (testscriptId) => {
   try {
-    const testscript = await Testscript.find(testscriptId);
+    const testscript = await Testscript.find({_id : testscriptId});
     if (!testscript) {
       throw new Error("Error: Testscript not found");
     }

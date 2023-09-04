@@ -26,7 +26,12 @@ const getTeststepById = catchAsync(async (req, res) => {
   res.json(teststep);
 });
 
-
+const updateTeststep=catchAsync(async(req,res)=>{
+    const {id}=req.params;
+    const updatedTestStep=req.body;
+    const testStep= await teststepsService.updateTeststep(id,updatedTestStep);
+    res.json(testStep);
+})
 
 const deleteTeststep = catchAsync(async(req, res) => {
     const { id } = req.params;
@@ -40,4 +45,4 @@ const getTestStepsByTestcaseId=catchAsync(async(req,res)=>{
     res.json(testSteps);
 })
 
-module.exports = { createTeststep, getTeststeps, getTeststepById, deleteTeststep,getTestStepsByTestcaseId };
+module.exports = { createTeststep, getTeststeps, getTeststepById, deleteTeststep,getTestStepsByTestcaseId ,updateTeststep};

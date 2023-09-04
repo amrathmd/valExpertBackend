@@ -9,6 +9,7 @@ router
     .get(teststepsController.getTeststeps);
 router.route('/:id')
     .get(teststepsController.getTeststepById)
-    .delete(teststepsController.deleteTeststep);
+    .delete(teststepsController.deleteTeststep)
+    .put(teststepsController.updateTeststep)
 router.route('/testcases/:id').get(teststepsController.getTestStepsByTestcaseId)
 module.exports = router;

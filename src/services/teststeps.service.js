@@ -67,13 +67,23 @@ const deleteTeststep = async (teststepId) => {
   }
 };
 
+const updateTeststep=async(testStepId,updatedTestStep)=>{
+  try{
+    const testStep= await Teststep.findByIdAndUpdate(testStepId,updatedTestStep,{
+      new:true
+    });
+    return testStep;
+  }catch{
+    throw { statusCode: 500, message: "Error updating user." };
+  }
+}
 
 const getTestStepsByTestcaseId= async(testscriptId)=>{
   const testSteps=await Teststep.find({testscriptId:testscriptId});
   console.log(testSteps);
   return testSteps;
 }
-module.exports = { createTeststep, getTeststeps, getTeststepById, deleteTeststep,getTestStepsByTestcaseId};
+module.exports = { createTeststep, getTeststeps, getTeststepById, deleteTeststep,getTestStepsByTestcaseId,updateTeststep};
 
 
 

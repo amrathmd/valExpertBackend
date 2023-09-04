@@ -38,6 +38,24 @@ const getRequirementsByRequirementSetId = catchAsync(async (req, res) => {
     res.json(requirements);
 });
 
+/*const getRequirementsByProjectId = catchAsync(async (req,res) => {
+    const { projectId } = req.params;
+    console.log('Incoming request to fetch requirements for projectId:', projectId);
+    const requirements = await requirementsService.getRequirementsByProjectId(projectId);
+    res.json(requirements);
+})*/
+const getRequirementsByProjectId = async (req, res) => {
+    try {
+      const { projectId } = req.params;
+      console.log('Incoming request to fetch requirements for projectId:', projectId);
+      const requirements = await requirementsService.getRequirementsByProjectId(projectId);
+      console.log('Sending requirements response:', requirements);
+      res.json(requirements);
+    } catch (error) {
+      console.error('Error handling request:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
 const getRequirementsByTestsetId = catchAsync(async (req, res) => {
     const { testsetId } = req.params;
     const requirements = await requirementsService.getRequirementsByTestsetId(testsetId);
@@ -75,4 +93,5 @@ module.exports = {
     getRequirementsByTestscriptId,
     updateRequirementTetscripts,
     updateRequirementTetsteps,
+    getRequirementsByProjectId
 };

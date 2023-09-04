@@ -3,13 +3,14 @@ const Testscript = require("../models/testscripts.model");
 const Test = require("../models/testsets.model");
 const Teststep = require("../models/teststeps.model");
 const Requirement = require("../models/requirements.model");
+const Project = require('../models/project.model');
 
 const createTestscript = async (testscriptBody) => {
   try {
     console.log(testscriptBody);
     const { testsetId, ...test } = testscriptBody;
 
-    const testset = await Test.findOne({ _id: testsetId });
+    const testset = await Test.findOne({ _id:testsetId });
     if (!testset) {
       throw new Error("Testset not found");
     }
@@ -71,8 +72,10 @@ const updateTestscript = async (testscriptId, updateData) => {
     throw new Error("Error updating Testscript");
   }
 };
-const updateRequirements = async (testscriptId, newRequirements) => {
+
+const updateRequirements = async (testscriptId, requirements) => {
   try {
+    console.log(requirements);
     const existingTestscript = await Testscript.findById(testscriptId);
 
     if (!existingTestscript) {
@@ -81,16 +84,18 @@ const updateRequirements = async (testscriptId, newRequirements) => {
 
     existingTestscript.requirements = [
       ...existingTestscript.requirements,
-      ...newRequirements,
+      ...requirements,
     ];
 
     const updatedTestscript = await existingTestscript.save();
 
     return updatedTestscript;
   } catch (error) {
+    console.log(error);
     throw new Error('Error updating requirements');
   }
 };
+
 const deleteTestscript = async (testscriptId) => {
   try {
     console.log(testscriptId);
@@ -137,6 +142,28 @@ const getTestscriptsByRequirement = async (requirementId) => {
   }
 };
 
+const getTestscriptsByProjectId = async (projectId) => {
+  try {
+    // Check if the project exists
+    const project = await Project.findById(projectId);
+    if (!project) {
+      throw new Error('Project not found');
+    }
+
+    // Find all testsets for the project
+    const testsets = await Test.find({ projectId });
+    const testsetIds = testsets.map((testset) => testset._id);
+
+    // Find all testscripts for the testsets
+    const testscripts = await Testscript.find({ testsetId: { $in: testsetIds } });
+
+    return testscripts;
+  } catch (error) {
+    throw new Error('Error fetching test scripts by project ID');
+  }
+};
+
+
 const updateTestscriptRequirement = async (testscriptId, requirements) => {
   try {
       const existingTestscripts = await Testscript.findById(testscriptId);
@@ -173,4 +200,5 @@ module.exports = {
   updateRequirements,
   getTestscriptsByRequirement,
   updateTestscriptRequirement,
+  getTestscriptsByProjectId
 };

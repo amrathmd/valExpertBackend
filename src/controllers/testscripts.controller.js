@@ -53,6 +53,14 @@ const getTestscriptsByRequirement = catchAsync(async (req, res) => {
   res.json(testscript);
 })
 
+
+const getTestscriptsByProjectId = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const testscript = await testscriptsService.getTestscriptsByProjectId(id);
+  res.json(testscript);
+})
+
+
 const updateTestscriptRequirement = catchAsync(async (req, res) => {
   const { id } = req.params;
   const { requirements } = req.body;
@@ -68,5 +76,6 @@ module.exports = {
   createTestscript,
   updateRequirements,
   getTestscriptsByRequirement,
-  updateTestscriptRequirement
+  updateTestscriptRequirement,
+  getTestscriptsByProjectId
 };

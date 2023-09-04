@@ -2,56 +2,6 @@ const Teststep = require('../models/teststeps.model');
 const Testscript = require('../models/testscripts.model');
 const catchAsync = require('../utils/catchAsync');
 
-
-/*const createTeststep = async (testscriptId, stepNumber, description, expectedResult, requirementIds) => {
-  try {
-    if (!testscriptId || !stepNumber || !description || !expectedResult || !Array.isArray(requirementIds)) {
-      throw new Error('Invalid input data.');
-    }
-
-    const testscript = await Testscript.findById(testscriptId)
-      .populate({
-        path: 'testsetId',
-        populate: {
-          path: 'requirementSetId',
-          populate: {
-            path: 'requirements',
-          },
-        },
-      })
-      .exec();
-
-    if (!testscript) {
-      throw new Error('Testscript not found.');
-    }
-
-    const requirementSet = testscript.testsetId.requirementSetId;
-
-    const validRequirementIds = requirementIds.filter((reqId) =>
-      requirementSet.requirements.some((req) => req._id.equals(reqId))
-    );
-
-    const teststep = new Teststep({
-      testscriptId,
-      stepNumber,
-      description,
-      expectedResult,
-      requirementId: validRequirementIds,
-    });
-
-    const savedTeststep = await teststep.save();
-    await Testscript.updateOne(
-      { _id: testscriptId },
-      { $push: { teststeps: savedTeststep._id } }
-    );
-    return savedTeststep;
-  } catch (error) {
-  
-    console.error('Error creating Teststep:', error);
-    throw error;
-  }
-};*/
-
 const createTeststep = async(teststepBody)=>
 {
   try {
@@ -65,15 +15,13 @@ const createTeststep = async(teststepBody)=>
     const teststep = new Teststep({
       testscriptId: testscript._id,
       bugs: [],
+      requirements: [],
       ...test,
     });
 
     const savedTeststep = await teststep.save();
     testscript.teststeps.push(savedTeststep._id);
-    const requirement =  new Requirement();
-    requirement.teststeps.push(savedTeststep._id);
     await testscript.save();
-    await requirement.save();
     return savedTeststep;
   } catch (error) {
     console.log(error);
@@ -165,7 +113,14 @@ const updateTeststepRequirement = async (teststepId, requirements) => {
       throw new Error('Error updating Teststeps');
     }
 }
-module.exports = { createTeststep, getTeststeps, getTeststepById, deleteTeststep, getTestStepsByTestcaseId, getTeststepsByRequirement, updateTeststepRequirement };
+module.exports = { createTeststep, 
+  getTeststeps, 
+  getTeststepById, 
+  deleteTeststep, 
+  getTestStepsByTestcaseId, 
+  getTeststepsByRequirement, 
+  updateTeststepRequirement 
+};
 
 
 

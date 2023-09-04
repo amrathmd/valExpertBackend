@@ -10,10 +10,12 @@ router.route('/:id')
     .put(testscriptsController.updateTestscript)
     .delete(testscriptsController.deleteTestscript)
     .patch(testscriptsController.updateRequirements);
-router.route('/testset/:id')
+router.route('/testset/:testsetId')
     .get(testscriptsController.getTestscriptByTestSetId);
-router.route('/requirements/:id')
+router.route('/requirements/:requirementId')
     .get(testscriptsController.getTestscriptsByRequirement);
-router.route('/:id/update')
+router.route('/update/:id')
     .get(testscriptsController.updateTestscriptRequirement);
+router.route('/project/:projectId')
+    .get(testscriptsController.getTestscriptsByProjectId);
 module.exports = router;

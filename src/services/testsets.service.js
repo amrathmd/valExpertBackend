@@ -23,7 +23,9 @@ const createTestsets = async (testsetsBody) => {
     if (!requirementSet || !projectset) {
       throw new Error("RequirementSet or Project not found");
     }
-
+    if (requirementSet.testsetId) {
+      throw new Error("RequirementSet already mapped to a TestSet");
+    }
     
     // Check for the latest version of the test set
     // const latestVersion = await Test.findOne({ projectId }).sort({ version: -1 });

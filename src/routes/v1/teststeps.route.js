@@ -10,12 +10,12 @@ router
 router.route('/:id')
     .get(teststepsController.getTeststepById)
     .delete(teststepsController.deleteTeststep);
-router.route('/testcases/:id')
+router.route('/testcases/:testscriptId')
     .get(teststepsController.getTestStepsByTestcaseId);
 
-router.route('requirements/:id')
+router.route('requirements/:requirementId')
     .get(teststepsController.getTeststepsByRequirement);
 
-router.route('/:id/update')
+router.route('/update/:id')
     .get(teststepsController.updateTeststepRequirement);
 module.exports = router;

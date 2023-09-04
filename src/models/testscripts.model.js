@@ -45,7 +45,7 @@ const testscriptSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: "Requirement",
         required: true,
-    }],
+    },],
     run: [{
         type: Schema.Types.ObjectId,
         ref: "Run",

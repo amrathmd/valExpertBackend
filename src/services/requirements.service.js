@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const Requirement = require('../models/requirements.model');
 const RequirementSet = require('../models/requirementSet.model');
 const Teststep = require('../models/teststeps.model');
-
+const Project = require('../models/project.model');
+const Testscript = require('../models/testscripts.model');
 
 const createRequirements = async(requirementBody) => {
     try {
@@ -57,6 +58,27 @@ const getRequirementById = async(requirementId) => {
         throw new Error('Error retrieving requirement');
     }
 };
+
+
+const getRequirementsByProjectId = async (projectId) => {
+  try {
+    console.log('Fetching requirements by project ID for projectId:', projectId);
+    const project = await Project.findById(projectId);
+    if (!project) {
+      throw new Error('Project not found');
+    }
+    const requirementSets = await RequirementSet.find({ projectId });
+    const requirementSetIds = requirementSets.map((reqSet) => reqSet._id);
+    const requirements = await Requirement.find({ requirementSetId: { $in: requirementSetIds } });
+    console.log('Requirements fetched successfully:', requirements);
+    console.log('Function getRequirementsByProjectId completed successfully.');
+    return requirements;
+  } catch (error) {
+    console.error('Error fetching requirements by project ID:', error);
+    throw new Error('Error fetching requirements by project ID');
+  }
+};
+
 
 const getRequirementsByRequirementSetId = async (requirementSetId) => {
     try {
@@ -165,16 +187,19 @@ const updateRequirementTetscripts = async (requirementId, testscripts) => {
     
         return updatedRequirement;
       } catch (error) {
+        console.error(error);
         throw new Error('Error updating requirements');
       }
 }
 
 const updateRequirementTetsteps = async (requirementId, teststeps) => {
     try {
+      console.log('Received teststeps:', teststeps);
+
         const existingRequirements = await Requirement.findById(requirementId);
     
         if (!existingRequirements) {
-          throw new Error('Testscript not found');
+          throw new Error('Requirement not found');
         }
     
         existingRequirements.teststeps = [
@@ -186,6 +211,7 @@ const updateRequirementTetsteps = async (requirementId, teststeps) => {
     
         return updatedRequirement;
       } catch (error) {
+        console.log(error);
         throw new Error('Error updating requirements');
       }
 }
@@ -200,5 +226,6 @@ module.exports = {
     getRequirementsByTestsetId,
     getRequirementsByTestscriptId,
     updateRequirementTetscripts,
-    updateRequirementTetsteps
+    updateRequirementTetsteps,
+    getRequirementsByProjectId
 };

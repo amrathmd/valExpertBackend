@@ -15,14 +15,18 @@ router.route('/:id')
 router.route('/requirementset/:requirementSetId')
     .get(requirementsController.getRequirementsByRequirementSetId);
 
-router.route('/testset/:id')
+router.route('/testset/testsetId')
     .get(requirementsController.getRequirementsByTestsetId);
 
-router.route('/:testscript/:id')
+router.route('/testscript/:testscriptId')
     .get(requirementsController.getRequirementsByTestscriptId)
     
-router.route('/:id/update')
-    .patch(requirementsController.updateRequirementTetscripts)
+router.route('/updateTestscripts/:id')
+    .patch(requirementsController.updateRequirementTetscripts);
+router.route('/updateTeststeps/:id')
     .patch(requirementsController.updateRequirementTetsteps);
+
+router.route('/project/:projectId')
+    .get(requirementsController.getRequirementsByProjectId);
 
 module.exports = router;

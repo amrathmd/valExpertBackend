@@ -15,7 +15,7 @@ router.route('/:id')
 router.route('/requirementset/:requirementSetId')
     .get(requirementsController.getRequirementsByRequirementSetId);
 
-router.route('/testset/testsetId')
+router.route('/testset/:testsetId')
     .get(requirementsController.getRequirementsByTestsetId);
 
 router.route('/testscript/:testscriptId')

@@ -95,7 +95,7 @@ const getTeststepsByRequirement = async (requirementId) => {
 
 const updateTeststepRequirement = async (teststepId, requirements) => {
   try {
-      const existingTeststeps = await Testscript.findById(teststepId);
+      const existingTeststeps = await Teststep.findById(teststepId);
   
       if (!existingTeststeps) {
         throw new Error('Teststep not found');
@@ -110,6 +110,7 @@ const updateTeststepRequirement = async (teststepId, requirements) => {
   
       return updatedRequirement;
     } catch (error) {
+      console.log(error);
       throw new Error('Error updating Teststeps');
     }
 }

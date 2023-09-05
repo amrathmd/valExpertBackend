@@ -94,18 +94,31 @@ const getRequirementsByRequirementSetId = async (requirementSetId) => {
     }
 };
 const getRequirementsByTestsetId = async (testsetId) => {
-    try {
-      const requirementSet = await RequirementSet.findOne({ testsetId }).exec();
-      if (!requirementSet) {
-        throw new Error('Requirementset not found for the given TestsetId');
-      }
-      const requirements = await Requirement.find({ requirementSet: requirementSet._id }).exec();
-      return requirements;
-    } catch (error) {
-      console.error(error);
-      throw new Error('Error fetching requirements by TestsetId');
+  try {
+    console.log('Fetching requirements for testsetId:', testsetId);
+
+    // Find the requirementSet associated with the provided testsetId
+    const requirementSet = await RequirementSet.findOne({ testsetId }).exec();
+
+    if (!requirementSet) {
+      throw new Error('Requirementset not found for the given TestsetId');
     }
-  };
+
+    // Get the array of requirement IDs from the requirementSet
+    const requirementIds = requirementSet.requirements;
+
+    // Fetch all the requirement objects using the IDs
+    const requirements = await Requirement.find({ _id: { $in: requirementIds } }).exec();
+
+    console.log('Fetched requirements:', requirements);
+
+    return requirements;
+  } catch (error) {
+    console.error('Error fetching requirements by TestsetId:', error);
+    throw new Error('Error fetching requirements by TestsetId');
+  }
+};
+
   
 const getRequirementsByTestscriptId = async (testscriptId) => {
     try {
@@ -140,7 +153,7 @@ const updateRequirement = async(requirementId, updateData) => {
 
 
 
-const deleteRequirement = async (requirementId) => {
+/*const deleteRequirement = async (requirementId) => {
     try {
         const requirement = await Requirement.findById(requirementId);
         if (!requirement) {
@@ -169,6 +182,61 @@ const deleteRequirement = async (requirementId) => {
         throw error;
     }
 };
+*/
+const deleteRequirement = async (requirementId) => {
+  try {
+    const requirement = await Requirement.findById(requirementId);
+    if (!requirement) {
+      throw new Error('Error: Requirement not found');
+    }
+
+    const requirementSetId = requirement.requirementSetId;
+
+    // Find the associated Test Set for the Requirement Set
+    const testSet = await Test.findOne({ requirementSetId });
+    
+    // If the Test Set is not found, simply delete the Requirement
+    if (!testSet) {
+      const deletedRequirement = await Requirement.findByIdAndDelete(
+        requirementId
+      );
+      return deletedRequirement;
+    }
+
+    // Update Requirement Set to remove the deleted Requirement ID
+    const updatedRequirementSet = await RequirementSet.findByIdAndUpdate(
+      requirementSetId,
+      {
+        $pull: { requirements: requirementId },
+      }
+    );
+    if (!updatedRequirementSet) {
+      throw new Error('Error: RequirementSet not found');
+    }
+
+    // Update Test Scripts in the Test Set to remove the deleted Requirement ID
+    const updatedTestScripts = await Testscript.updateMany(
+      { _id: { $in: testSet.testscripts }, requirements: requirementId },
+      { $pull: { requirements: requirementId } }
+    );
+
+    // Update Test Steps in the Test Set to remove the deleted Requirement ID
+    const updatedTestSteps = await Teststep.updateMany(
+      { _id: { $in: testSet.teststeps }, requirements: requirementId },
+      { $pull: { requirements: requirementId } }
+    );
+
+    // Delete the Requirement
+    const deletedRequirement = await Requirement.findByIdAndDelete(
+      requirementId
+    );
+
+    return deletedRequirement;
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 const updateRequirementTetscripts = async (requirementId, testscripts) => {
     try {

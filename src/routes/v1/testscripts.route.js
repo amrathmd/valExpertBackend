@@ -9,7 +9,7 @@ router.route('/:id')
     .get(testscriptsController.getTestscriptById)
     .put(testscriptsController.updateTestscript)
     .delete(testscriptsController.deleteTestscript)
-    .patch(testscriptsController.updateRequirements);
+    .patch(testscriptsController.updateTestscriptRequirement);
 router.route('/testset/:testsetId')
     .get(testscriptsController.getTestscriptByTestSetId);
 router.route('/requirements/:requirementId')

@@ -48,7 +48,7 @@ const getTeststepsByRequirement = catchAsync(async (req, res) => {
 const updateTeststepRequirement = catchAsync(async (req, res) => {
     const { id } = req.params;
     const { requirements } = req.body;
-    const updatedTestscripts = await requirementsService.updateTeststepRequirement(id, requirements );
+    const updatedTestscripts = await teststepsService.updateTeststepRequirement(id, requirements );
     res.json(updatedTestscripts);
 
 })

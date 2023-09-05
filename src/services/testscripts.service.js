@@ -72,30 +72,6 @@ const updateTestscript = async (testscriptId, updateData) => {
     throw new Error("Error updating Testscript");
   }
 };
-
-const updateRequirements = async (testscriptId, requirements) => {
-  try {
-    console.log(requirements);
-    const existingTestscript = await Testscript.findById(testscriptId);
-
-    if (!existingTestscript) {
-      throw new Error('Testscript not found');
-    }
-
-    existingTestscript.requirements = [
-      ...existingTestscript.requirements,
-      ...requirements,
-    ];
-
-    const updatedTestscript = await existingTestscript.save();
-
-    return updatedTestscript;
-  } catch (error) {
-    console.log(error);
-    throw new Error('Error updating requirements');
-  }
-};
-
 const deleteTestscript = async (testscriptId) => {
   try {
     console.log(testscriptId);
@@ -116,7 +92,7 @@ const deleteTestscript = async (testscriptId) => {
     const deletedTestscript = await Testscript.findByIdAndDelete(testscriptId);
     return deletedTestscript;
   } catch (error) {
-    console.error("Error deleting test script:", error);
+    console.error("Error deleting test script:", error); vvvv 
     throw error;
   }
 };
@@ -165,7 +141,12 @@ const getTestscriptsByProjectId = async (projectId) => {
 
 
 const updateTestscriptRequirement = async (testscriptId, requirements) => {
+  console.log('Received requirements:', requirements);
+
   try {
+    if (!Array.isArray(requirements)) {
+      throw new Error('Requirements must be an array');
+    }
       const existingTestscripts = await Testscript.findById(testscriptId);
   
       if (!existingTestscripts) {
@@ -176,9 +157,7 @@ const updateTestscriptRequirement = async (testscriptId, requirements) => {
         ...existingTestscripts.requirements,
         ...requirements,
       ];
-  
       const updatedRequirement = await existingTestscripts.save();
-  
       return updatedRequirement;
     } catch (error) {
       throw new Error('Error updating Testscripts');
@@ -197,8 +176,7 @@ module.exports = {
   updateTestscript,
   deleteTestscript,
   getTestscriptByTestSetId,
-  updateRequirements,
   getTestscriptsByRequirement,
   updateTestscriptRequirement,
-  getTestscriptsByProjectId
+  getTestscriptsByProjectId,
 };

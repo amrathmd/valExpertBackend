@@ -9,13 +9,11 @@ router
     .get(teststepsController.getTeststeps);
 router.route('/:id')
     .get(teststepsController.getTeststepById)
-    .delete(teststepsController.deleteTeststep);
+    .delete(teststepsController.deleteTeststep)
+    .patch(teststepsController.updateTeststepRequirement);
 router.route('/testcases/:testscriptId')
     .get(teststepsController.getTestStepsByTestcaseId);
 
 router.route('requirements/:requirementId')
     .get(teststepsController.getTeststepsByRequirement);
-
-router.route('/update/:id')
-    .get(teststepsController.updateTeststepRequirement);
 module.exports = router;

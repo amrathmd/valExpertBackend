@@ -49,6 +49,16 @@ const runSchema = new mongoose.Schema({
         enum: ['Pass', 'Fail', 'N/A'],
         required: true,
     }],
+    testscripts : [{
+        type: String,
+        ref: 'Typescript',
+        required: true,
+    }],
+    bugs: [{
+        type: String,
+        ref: 'Bug',
+        required: true,
+    }]
 });
 
 

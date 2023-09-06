@@ -202,7 +202,6 @@ const deleteRequirement = async (requirementId) => {
       );
       return deletedRequirement;
     }
-
     // Update Requirement Set to remove the deleted Requirement ID
     const updatedRequirementSet = await RequirementSet.findByIdAndUpdate(
       requirementSetId,
@@ -213,24 +212,20 @@ const deleteRequirement = async (requirementId) => {
     if (!updatedRequirementSet) {
       throw new Error('Error: RequirementSet not found');
     }
-
     // Update Test Scripts in the Test Set to remove the deleted Requirement ID
     const updatedTestScripts = await Testscript.updateMany(
       { _id: { $in: testSet.testscripts }, requirements: requirementId },
       { $pull: { requirements: requirementId } }
     );
-
     // Update Test Steps in the Test Set to remove the deleted Requirement ID
     const updatedTestSteps = await Teststep.updateMany(
-      { _id: { $in: testSet.teststeps }, requirements: requirementId },
+      { _id: { $in: Testscript.teststeps }, requirements: requirementId },
       { $pull: { requirements: requirementId } }
     );
-
     // Delete the Requirement
     const deletedRequirement = await Requirement.findByIdAndDelete(
       requirementId
     );
-
     return deletedRequirement;
   } catch (error) {
     throw error;

@@ -183,54 +183,56 @@ const updateRequirement = async(requirementId, updateData) => {
     }
 };
 */
+
+
 const deleteRequirement = async (requirementId) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
-    const requirement = await Requirement.findById(requirementId);
+    const requirement = await Requirement.findById(requirementId).session(session);
     if (!requirement) {
-      throw new Error('Error: Requirement not found');
+      throw new Error('Requirement not found');
     }
 
     const requirementSetId = requirement.requirementSetId;
 
-    // Find the associated Test Set for the Requirement Set
-    const testSet = await Test.findOne({ requirementSetId });
-    
-    // If the Test Set is not found, simply delete the Requirement
-    if (!testSet) {
-      const deletedRequirement = await Requirement.findByIdAndDelete(
-        requirementId
-      );
-      return deletedRequirement;
+    const testSet = await Test.findOne({ requirementSetId }).session(session);
+
+    // Update Testscripts to remove the requirementId under the specific Testset
+    if (testSet) {
+      await Testscript.updateMany(
+        { testsetId: testSet._id, requirements: requirementId },
+        { $pull: { requirements: requirementId } }
+      ).session(session);
     }
-    // Update Requirement Set to remove the deleted Requirement ID
-    const updatedRequirementSet = await RequirementSet.findByIdAndUpdate(
+
+    // Update Teststeps to remove the requirementId under the specific Testscripts
+    await Teststep.updateMany(
+      { testscriptId: { $in: requirement.testscripts }, requirements: requirementId },
+      { $pull: { requirements: requirementId } }
+    ).session(session);
+
+    // Update RequirementSet by removing the requirementId
+    await RequirementSet.findByIdAndUpdate(
       requirementSetId,
-      {
-        $pull: { requirements: requirementId },
-      }
-    );
-    if (!updatedRequirementSet) {
-      throw new Error('Error: RequirementSet not found');
-    }
-    // Update Test Scripts in the Test Set to remove the deleted Requirement ID
-    const updatedTestScripts = await Testscript.updateMany(
-      { _id: { $in: testSet.testscripts }, requirements: requirementId },
       { $pull: { requirements: requirementId } }
-    );
-    // Update Test Steps in the Test Set to remove the deleted Requirement ID
-    const updatedTestSteps = await Teststep.updateMany(
-      { _id: { $in: Testscript.teststeps }, requirements: requirementId },
-      { $pull: { requirements: requirementId } }
-    );
+    ).session(session);
+
     // Delete the Requirement
-    const deletedRequirement = await Requirement.findByIdAndDelete(
-      requirementId
-    );
-    return deletedRequirement;
+    await Requirement.findByIdAndDelete(requirementId).session(session);
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return { message: 'Requirement and associated references deleted' };
   } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
     throw error;
   }
 };
+
 
 
 const updateRequirementTetscripts = async (requirementId, testscripts) => {

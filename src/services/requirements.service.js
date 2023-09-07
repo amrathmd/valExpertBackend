@@ -151,40 +151,6 @@ const updateRequirement = async(requirementId, updateData) => {
     }
 };
 
-
-
-/*const deleteRequirement = async (requirementId) => {
-    try {
-        const requirement = await Requirement.findById(requirementId);
-        if (!requirement) {
-            throw new Error('Error: Requirement not found');
-        }
-        
-        const requirementSet = await RequirementSet.findById(requirement.requirementSetId);
-        if (!requirementSet) {
-            throw new Error('Error: RequirementSet not found');
-        }
-
-        requirementSet.requirements.pull(requirementId);
-        await requirementSet.save();
-
-
-        await Teststep.updateMany(
-            { requirementId: requirementId },
-            { $pull: { requirementId: requirementId } }
-        );
-
-
-        const deletedRequirement = await Requirement.findByIdAndDelete(requirementId);
-
-        return deletedRequirement;
-    } catch (error) {
-        throw error;
-    }
-};
-*/
-
-
 const deleteRequirement = async (requirementId) => {
   const session = await mongoose.startSession();
   session.startTransaction();

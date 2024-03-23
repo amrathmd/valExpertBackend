@@ -1,8 +1,8 @@
 const adminUser = require("../models/users.model");
 const bcrypt = require("bcryptjs");
 const AWS = require("aws-sdk");
-const dotenv = require("dotenv"); 
-const config = require('../config/config')
+const dotenv = require("dotenv");
+const config = require("../config/config");
 
 dotenv.config();
 
@@ -15,7 +15,8 @@ AWS.config.update({
 const ses = new AWS.SES({ apiVersion: "2010-12-01" });
 
 function generateRandomPassword(length) {
-  const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+  const charset =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
   let password = "";
   for (let i = 0; i < length; i++) {
     const randomIndex = Math.floor(Math.random() * charset.length);
@@ -45,9 +46,9 @@ async function sendEmailWithPassword(email, password) {
   //await ses.sendEmail(emailParams).promise();
   try {
     const result = await ses.sendEmail(emailParams).promise();
-    console.log('Email sent successfully:', result);
+    console.log("Email sent successfully:", result);
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error("Error sending email:", error);
     throw error;
   }
 }
@@ -60,16 +61,14 @@ const createAdminUser = async (userData) => {
       throw { statusCode: 400, message: "Email is already taken." };
     }
     const randomPassword = generateRandomPassword(6);
-    await sendEmailWithPassword(email, randomPassword);
     const hashPassword = await bcrypt.hash(randomPassword, config.saltRounds);
-    
+
     const userData1 = {
       ...userData,
-      password : hashPassword
-    }
+      password: hashPassword,
+    };
     const newUser = new adminUser(userData1);
-    
-    
+
     await newUser.save();
     return newUser;
   } catch (error) {
@@ -77,9 +76,6 @@ const createAdminUser = async (userData) => {
     throw { statusCode: 500, message: "Error creating user." };
   }
 };
-
-
-
 
 const getAdminUsers = async () => {
   try {
@@ -131,9 +127,11 @@ const updateAdminPassword = async (userId, currentPassword, newPassword) => {
       throw { statusCode: 400, message: "Incorrect current password." };
     }
 
-
     const hashedPssword = await bcrypt.hash(newPassword, config.saltRounds);
-    const updatedUser =  await adminUser.updateOne({_id:userId},{$set:{password:hashedPssword}});
+    const updatedUser = await adminUser.updateOne(
+      { _id: userId },
+      { $set: { password: hashedPssword } }
+    );
     return updatedUser;
   } catch (error) {
     if (error.statusCode) {

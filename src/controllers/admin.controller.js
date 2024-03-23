@@ -1,9 +1,12 @@
 const adminServices = require("../services/admin.service");
 const bcrypt = require("bcrypt");
-const config = require('../config/config')
+const config = require("../config/config");
 
 const createAdmin = async (req, res) => {
-  const encrptPassword = await bcrypt.hash(req.body.password, saltRounds);
+  const encrptPassword = await bcrypt.hash(
+    req.body.password,
+    config.saltRounds
+  );
   const adminBody = {
     companyId: req.body.companyId,
     username: req.body.username,

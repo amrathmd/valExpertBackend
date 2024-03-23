@@ -32,18 +32,16 @@ const requirementSchema = new mongoose.Schema({
     priority: {
         type: String,
         enum: ['High', 'Medium', 'Low'],
-        required: true,
+        // required: true,
     },
     testscripts: [{
         type: Schema.Types.ObjectId,
         ref: "Testscript",
-        required: true,
      },
     ],
     teststeps: [{
         type: Schema.Types.ObjectId,
         ref: "Teststep",
-        required: true,
      },
     ],
    

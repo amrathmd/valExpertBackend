@@ -11,7 +11,7 @@ const testscriptSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    number: {
+    testCaseNumber: {
         type: Number,
         required: true,
     },
@@ -25,7 +25,7 @@ const testscriptSchema = new mongoose.Schema({
     },
     prerequesites: {
         type: String,
-        required: true,
+        // required: true,
     },
     result:{
         type: String,

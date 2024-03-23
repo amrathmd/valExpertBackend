@@ -1,6 +1,7 @@
 const companyServices = require("../services/company.service");
 
 const createCompany = async (req, res) => {
+  console.log("req body........",req.body)
   try {
     const company = await companyServices.createCompany(req.body);
     if (company) {
